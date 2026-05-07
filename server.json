@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.mrgulshanyadav/misarmail",
+  "name": "io.github.mrgulshanyadav/misarmail-mcp",
   "description": "MisarMail MCP Server - 32 tools for AI email marketing: send campaigns, manage contacts, check deliverability (DMARC/SPF/DKIM/warmup), A-B test, automate workflows, and run analytics. Authenticates with a MisarMail API key (msk_ prefix). Freemium - free tier at mail.misar.io.",
   "repository": {
     "url": "https://github.com/mrgulshanyadav/misarmail-mcp",
