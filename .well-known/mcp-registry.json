@@ -1,0 +1,15 @@
+{
+  "name": "MisarMail",
+  "description": "Email marketing and inbox management platform MCP server",
+  "version": "1.0.0",
+  "homepage": "https://mail.misar.io",
+  "contact": "support@misar.io",
+  "mcp": {
+    "url": "https://mail.misar.io/api/mcp",
+    "transport": "streamable-http",
+    "protocol_version": "2025-03-26"
+  },
+  "logo_url": "https://mail.misar.io/logo-light.png",
+  "namespace": "io.misarmail",
+  "verified_domain": "mail.misar.io"
+}

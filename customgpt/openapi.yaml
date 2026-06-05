@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  title: MisarMail MCP API
+  version: "2.0.0"
+  description: Email marketing platform API for AI assistants. 32 tools for campaigns, contacts, automations, analytics, and more.
+  contact:
+    name: Misar AI
+    email: gulshan@misar.io
+    url: https://misar.io
+
+servers:
+  - url: https://mail.misar.io/api/mcp
+    description: Production MCP endpoint
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: "msk_<key>"
+      description: "API key from mail.misar.io/developers"
+
+paths:
+  /:
+    post:
+      operationId: mcpCall
+      summary: MCP JSON-RPC endpoint
+      description: |
+        Send JSON-RPC 2.0 requests to the MisarMail MCP server.
+        Supported methods: tools/list, tools/call, resources/list, prompts/list, initialize.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [jsonrpc, method, id]
+              properties:
+                jsonrpc:
+                  type: string
+                  enum: ["2.0"]
+                method:
+                  type: string
+                  description: "MCP method (e.g., tools/list, tools/call)"
+                id:
+                  type: [string, integer]
+                params:
+                  type: object
+            examples:
+              listTools:
+                summary: List available tools
+                value:
+                  jsonrpc: "2.0"
+                  method: tools/list
+                  id: 1
+                  params: {}
+              sendEmail:
+                summary: Send an email
+                value:
+                  jsonrpc: "2.0"
+                  method: tools/call
+                  id: 2
+                  params:
+                    name: email.send
+                    arguments:
+                      to: "user@example.com"
+                      subject: "Hello from MisarMail"
+                      body_html: "<p>Your email content</p>"
+      responses:
+        "200":
+          description: JSON-RPC response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: [string, integer]
+                  result:
+                    type: object
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                      message:
+                        type: string

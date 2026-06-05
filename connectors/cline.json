@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "misarmail": {
+      "url": "https://mail.misar.io/api/mcp",
+      "transport": "http"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "misarmail",
+  "displayName": "MisarMail",
+  "version": "2.0.0",
+  "description": "Full email marketing platform for AI assistants — campaigns, contacts, automations, A/B testing, AI content, multi-channel messaging, deliverability monitoring, and advanced analytics.",
+  "author": {
+    "name": "Misar AI",
+    "url": "https://misar.io"
+  },
+  "icon": "https://mail.misar.io/logo-light.png",
+  "categories": ["email", "marketing", "productivity", "communication"],
+  "mcp": {
+    "url": "https://mail.misar.io/api/mcp",
+    "transport": "streamable-http",
+    "auth": {
+      "type": "oauth",
+      "authorizationUrl": "https://mail.misar.io/api/oauth/authorize",
+      "tokenUrl": "https://mail.misar.io/api/oauth/token",
+      "scopes": ["read", "write", "send", "contacts"]
+    }
+  },
+  "tools": 32,
+  "skills": 11,
+  "prompts": 5,
+  "homepage": "https://mail.misar.io",
+  "privacyPolicy": "https://mail.misar.io/privacy",
+  "termsOfService": "https://mail.misar.io/legal/terms",
+  "support": "support@misar.io",
+  "changelog": "https://github.com/mrgulshanyadav/MisarMail/blob/main/CHANGELOG.md"
+}

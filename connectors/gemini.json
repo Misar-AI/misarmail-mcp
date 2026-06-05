@@ -1,0 +1,21 @@
+{
+  "name": "misarmail",
+  "version": "1.0.0",
+  "description": "Email marketing & inbox management via MCP. Send emails, manage campaigns, contacts, and templates from Gemini CLI.",
+  "settings": [
+    {
+      "name": "MisarMail API Key",
+      "description": "Your MisarMail API key. Generate one at https://mail.misar.io/settings/api-keys (Pro plan required). Starts with msk_",
+      "envVar": "MISARMAIL_API_KEY",
+      "sensitive": true
+    }
+  ],
+  "mcpServers": {
+    "misarmail": {
+      "httpUrl": "https://mail.misar.io/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ${MISARMAIL_API_KEY}"
+      }
+    }
+  }
+}

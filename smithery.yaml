@@ -1,0 +1,525 @@
+# Smithery MCP Server Manifest
+# https://smithery.ai/docs/build
+
+name: misar-mail
+displayName: MisarMail
+description: >
+  Send emails, manage campaigns, contacts, templates, and automations
+  directly from your AI assistant. MisarMail gives AI agents full access
+  to a professional email marketing platform — inbox management, campaign
+  creation, contact lists, analytics, and warmup monitoring.
+
+version: "2.0.0"
+homepage: https://mail.misar.io
+icon: https://mail.misar.io/logo-light.png
+license: Proprietary
+
+server:
+  type: http
+  url: https://mail.misar.io/api/mcp
+
+auth:
+  type: oauth
+  authorizationUrl: https://mail.misar.io/api/oauth/authorize
+  tokenUrl: https://mail.misar.io/api/oauth/token
+  clientId: smithery-official
+  scope: "send read write contacts"
+
+config:
+  type: object
+  properties:
+    defaultFolder:
+      type: string
+      description: "Default email folder when none is specified."
+      enum: ["inbox", "sent", "drafts", "archive", "spam", "trash", "starred"]
+      default: "inbox"
+    defaultLimit:
+      type: number
+      description: "Default number of items per list request (1–50 for emails, 1–100 for contacts)."
+      default: 20
+      minimum: 1
+      maximum: 100
+    analyticsPeriod:
+      type: string
+      description: "Default analytics time period."
+      enum: ["today", "7d", "30d", "90d"]
+      default: "30d"
+
+tools:
+  - name: email.list
+    description: List emails from inbox, sent, archive, or any folder
+  - name: email.read
+    description: Read a specific email by ID
+  - name: email.send
+    description: Send a transactional or marketing email
+  - name: email.reply
+    description: Reply to an existing email thread
+  - name: email.archive
+    description: Archive an email
+  - name: campaign.list
+    description: List email marketing campaigns
+  - name: campaign.get
+    description: Get details of a specific campaign
+  - name: campaign.create
+    description: Create a new email marketing campaign
+  - name: campaign.send
+    description: Send or schedule a campaign
+  - name: contact.list
+    description: List contacts from your contact lists
+  - name: contact.add
+    description: Add a new contact
+  - name: contact.update
+    description: Update an existing contact
+  - name: template.create
+    description: Create a reusable email template
+  - name: analytics.get
+    description: Get campaign and deliverability analytics
+  - name: warmup.get
+    description: Get IP warmup status and progress
+  - name: account.score
+    description: Get deliverability score (0-100) and grade (A-F) with category breakdown
+  - name: key.list
+    description: List API keys for the account
+  # v2.0.0 — New tools
+  - name: automation.list
+    description: List automation workflows with status filtering
+  - name: automation.create
+    description: Create a new automation workflow with trigger configuration
+  - name: abtest.create
+    description: Create an A/B test variant for a campaign
+  - name: abtest.winner
+    description: Select the winning variant of an A/B test
+  - name: ai.subject_lines
+    description: Generate AI-powered subject line suggestions with predicted scores
+  - name: contact.score
+    description: Get contact engagement score, tier, and churn risk
+  - name: landing_page.create
+    description: Create a landing page with block-based content
+  - name: inbound.configure
+    description: Configure an inbound email processing domain
+  - name: dmarc.check
+    description: Check domain DMARC, SPF, DKIM, and MX health with score
+  - name: channel.whatsapp_send
+    description: Send a WhatsApp message via Business API
+  - name: channel.push_send
+    description: Send a web push notification
+  - name: revenue.attribution
+    description: Get ecommerce revenue attribution by campaign
+  - name: monetization.stats
+    description: Get newsletter monetization statistics (MRR, tips, sponsors)
+  - name: deliverability.audit
+    description: Run a full deliverability audit with recommendations
+  - name: report.generate
+    description: Generate advanced analytics reports (cohorts, heatmaps, funnels)
+
+categories:
+  - email
+  - marketing
+  - productivity
+  - communication
+
+tags:
+  - email
+  - campaigns
+  - contacts
+  - marketing
+  - smtp
+  - inbox
+  - automation
+  - ai
+  - deliverability
+  - dmarc
+  - ab-testing
+  - whatsapp
+  - push-notifications
+  - analytics
+  - landing-pages
+  - monetization
+  - ecommerce
+
+skills:
+  # ── v1.0.0 Core Skills (enriched from .skills/*.md) ───────────────────────
+
+  - name: send_transactional_email
+    displayName: Send Transactional Email
+    description: >
+      Send transactional emails (password reset, order confirmation, notification)
+      via MisarMail. Confirms sender, recipient, subject, and content before sending.
+      Handles HTML and plain-text content, CC/BCC recipients, up to 100 recipients per call.
+    prompt: |
+      You are an email delivery assistant using MisarMail MCP.
+
+      ## When to activate
+      - User asks to send a transactional email (password reset, order confirmation, notification, alert)
+      - User wants to email someone from a verified sender address
+      - User needs to send HTML or plain-text emails programmatically
+
+      ## Instructions
+      1. **Confirm the sender** — from_email must be a verified MisarMail sender address. Ask the user if not provided.
+      2. **Confirm recipient(s)** — collect email address(es), names are optional.
+      3. **Confirm subject and content** — prefer HTML with a plain-text fallback.
+      4. **Send the email** using email.send with the confirmed details.
+      5. **Report the result** — show the message ID on success, or explain the error with actionable next steps on failure.
+
+      ## Rules
+      - Always prefer HTML content with a text plain-text fallback
+      - Never send without confirming from_email, to, and subject
+      - Up to 100 recipients per call are supported
+      - CC/BCC are optional but supported
+    tools: [email.send]
+    examples:
+      - "Send a password reset email to user@example.com"
+      - "Email the order confirmation to john@example.com"
+      - "Notify the team about the outage"
+
+  - name: manage_inbox
+    displayName: Manage Email Inbox
+    description: >
+      Read, search, reply to, and organize emails in a MisarMail inbox.
+      Supports folder navigation (inbox, sent, drafts, archive, spam, trash, starred),
+      full-text search, and thread replies.
+    prompt: |
+      You are an inbox assistant using MisarMail MCP.
+
+      ## When to activate
+      - User asks to check, read, or search their emails
+      - User wants to reply to an email or thread
+      - User wants to archive, organize, or manage inbox folders
+      - User asks about unread emails or emails from a specific sender
+
+      ## Instructions
+      1. **List emails** using email.list — always specify folder (default: inbox) and limit (default: 10).
+      2. **Read a specific email** using email.read when the user asks for email content or details.
+      3. **Reply** using email.reply — fetch the original first to build proper threading context.
+      4. **Archive** using email.archive — always ask for confirmation before archiving.
+
+      ## Rules
+      - Always show subject, sender, date when listing emails
+      - Ask before archiving — this action moves emails out of inbox
+      - For search, use the search parameter in email.list
+      - Supported folders: inbox, sent, drafts, archive, spam, trash, starred
+    tools: [email.list, email.read, email.reply, email.archive]
+    examples:
+      - "Show my latest 10 unread emails"
+      - "Find emails from support@example.com"
+      - "Reply to the last email from the CEO"
+      - "Archive all emails older than 30 days"
+
+  - name: run_email_campaign
+    displayName: Create & Send Email Campaign
+    description: >
+      Create, review, and send or schedule marketing email campaigns via MisarMail.
+      Covers the full campaign lifecycle from draft to analytics.
+    prompt: |
+      You are a marketing campaign assistant using MisarMail MCP.
+
+      ## When to activate
+      - User wants to create a marketing or newsletter campaign
+      - User wants to send or schedule an email blast
+      - User asks about campaign performance, open rates, or click rates
+      - User wants to review existing campaigns
+
+      ## Instructions
+      1. **Collect campaign details** — ask for: name, subject, sender, HTML body, target audience, and send time.
+      2. **Create the campaign** using campaign.create to save a draft.
+      3. **Review** — show a summary and ask for confirmation before sending.
+      4. **Send or schedule** using campaign.send:
+         - Send immediately: omit scheduled_at
+         - Schedule: provide ISO 8601 datetime (e.g. 2026-03-25T09:00:00Z)
+      5. **Track performance** using analytics.get with the campaign_id after sending.
+
+      ## Rules
+      - Always confirm target audience and send time before dispatching
+      - All marketing emails must include an unsubscribe link in the HTML
+      - Use campaign.list to browse existing campaigns before creating duplicates
+      - Bounce rate > 2% or complaint rate > 0.1% requires immediate attention
+    tools: [campaign.create, campaign.send, campaign.list, campaign.get, analytics.get]
+    examples:
+      - "Create a welcome email campaign for new signups"
+      - "Schedule a product launch campaign for next Monday 9am"
+      - "Show me the open rate for my last campaign"
+
+  - name: manage_contacts
+    displayName: Manage Contacts
+    description: >
+      Add, update, search, and organize email contacts in MisarMail.
+      Supports tagging, subscription status management, and bulk operations.
+    prompt: |
+      You are a contact management assistant using MisarMail MCP.
+
+      ## When to activate
+      - User wants to add new contacts or subscribers
+      - User needs to search, filter, or browse their contact list
+      - User wants to update contact details, tags, or subscription status
+      - User needs to unsubscribe or remove contacts
+
+      ## Instructions
+      1. **Search/browse contacts** using contact.list with optional search, status, or tags filters.
+      2. **Add a new contact** using contact.add — always validate email format before adding.
+      3. **Update an existing contact** using contact.update — use for name changes, tag updates, or status changes.
+      4. **Unsubscribe** — use contact.update with status: "unsubscribed" (never delete — preserve for compliance).
+
+      ## Rules
+      - Always validate email address format before adding
+      - Use status: "unsubscribed" to unsubscribe — never delete contact records (compliance requirement)
+      - Tags are arrays of strings (e.g. ["newsletter", "vip", "customer"])
+      - Status values: subscribed, unsubscribed, bounced, complained
+      - Check for duplicate email before adding a new contact
+    tools: [contact.list, contact.add, contact.update]
+    examples:
+      - "Add john@example.com to my audience with tag 'newsletter'"
+      - "Find all contacts tagged 'vip'"
+      - "Unsubscribe user@example.com"
+      - "Update Jane Doe's last name to Smith"
+
+  - name: check_deliverability
+    displayName: Check Email Deliverability & Warmup
+    description: >
+      Monitor email deliverability health, credibility score, IP warmup progress,
+      and campaign analytics via MisarMail. Identifies issues before they affect sending reputation.
+    prompt: |
+      You are an email deliverability analyst using MisarMail MCP.
+
+      ## When to activate
+      - User asks about email deliverability health or sender reputation
+      - User wants to check their email credibility or deliverability score
+      - User wants to check IP warmup status or progress
+      - User asks about bounce rates, complaint rates, or open rates
+      - User suspects emails are landing in spam
+      - User wants to improve their sender score
+
+      ## Instructions
+      1. **Get overall deliverability score** using account.score — returns a 0-100 score with grade (A-F) and category breakdown (authentication, reputation, engagement, infrastructure).
+      2. **Check IP warmup** using warmup.get — review daily sending progress and warmup schedule.
+      3. **Fetch analytics** using analytics.get with period: "30d" — review bounce, complaint, open, and click rates.
+      4. **Alert on threshold breaches**:
+         - Overall score < 60 → serious deliverability issues
+         - Bounce rate > 2% → immediate action required
+         - Complaint rate > 0.1% → immediate action required
+         - Authentication issues (SPF/DKIM/DMARC missing) → fix DNS records first
+      5. **Provide specific recommendations** from account.score.top_recommendations — not generic advice.
+
+      ## Rules
+      - Always start with account.score for the holistic picture, then drill into specific areas
+      - Authentication issues (grade F on auth) override everything — fix DNS before warming up
+      - Prioritize complaint rate issues (ISPs may block the sending domain)
+      - For warmup: daily sending must not exceed the current phase limit
+      - Recommend list cleaning if bounce rate is elevated
+    tools: [account.score, warmup.get, analytics.get]
+    examples:
+      - "What is my email deliverability score?"
+      - "How is my IP warmup going?"
+      - "Check my deliverability health"
+      - "What's my bounce rate this month?"
+
+  - name: create_email_template
+    displayName: Create Email Template
+    description: >
+      Create reusable, professional email templates with merge tag support via MisarMail.
+      For marketing, transactional, or automation use cases.
+    prompt: |
+      You are an email template designer using MisarMail MCP.
+
+      ## When to activate
+      - User wants to create a reusable email template
+      - User needs a template for campaigns, transactional emails, or automations
+      - User wants to design an email with merge tags (personalization)
+
+      ## Instructions
+      1. **Gather requirements** — ask for: template name, subject line, type (marketing / transactional / automation), and desired content/design.
+      2. **Use merge tags** with {{variable_name}} syntax for personalization:
+         - {{first_name}}, {{last_name}}, {{company}}, {{unsubscribe_url}}
+      3. **Build the HTML** — responsive, with a plain-text fallback.
+      4. **Create the template** using template.create.
+      5. **Confirm the save** — provide the template_id for future use in campaigns.
+
+      ## Rules
+      - Marketing templates MUST include an unsubscribe link: <a href="{{unsubscribe_url}}">Unsubscribe</a>
+      - Always include a plain-text text fallback alongside html
+      - Use inline CSS for email clients (Outlook compatibility)
+      - Subject lines should be under 60 characters for mobile preview
+    tools: [template.create]
+    examples:
+      - "Create a welcome email template with the user's first name"
+      - "Build a monthly newsletter template"
+      - "Make a transactional order confirmation template"
+
+  # v2.0.0 — New skills
+  - name: build_automation
+    displayName: Build Email Automation
+    description: >
+      Create automated email workflows with triggers, conditions, delays,
+      and actions. Build welcome series, abandoned cart recovery, re-engagement
+      campaigns, and more.
+    prompt: >
+      You are an email automation architect using MisarMail.
+      To build an automation:
+      1. Ask what the automation should achieve (welcome series, cart recovery, etc.).
+      2. Use automation.create to set up the workflow with the appropriate trigger type.
+      3. Describe the flow: trigger → delay → email → condition → branches.
+      4. The visual builder at mail.misar.io/automations/new handles the full drag-drop canvas.
+      For complex workflows, recommend the visual builder for drag-drop editing.
+    tools: [automation.list, automation.create]
+    examples:
+      - "Create a welcome series for new subscribers"
+      - "Build an abandoned cart recovery workflow"
+      - "Set up a re-engagement automation for inactive contacts"
+
+  - name: optimize_deliverability
+    displayName: Optimize Email Deliverability
+    description: >
+      Run deliverability audits, check DMARC/SPF/DKIM, monitor sender reputation,
+      and get AI-powered recommendations to improve inbox placement.
+    prompt: >
+      You are a deliverability optimization expert using MisarMail.
+      To optimize deliverability:
+      1. Use deliverability.audit to run a full audit and get a score breakdown.
+      2. Use dmarc.check to verify domain authentication (SPF, DKIM, DMARC).
+      3. Use account.score for real-time reputation monitoring.
+      4. Prioritize recommendations by severity: critical > warning > info.
+      5. Focus on: bounce rate < 2%, complaint rate < 0.1%, DMARC policy = reject.
+    tools: [deliverability.audit, dmarc.check, account.score, warmup.get]
+    examples:
+      - "Run a full deliverability audit"
+      - "Check DMARC setup for example.com"
+      - "How can I improve my sender reputation?"
+
+  - name: ai_content_assistant
+    displayName: AI Email Content Assistant
+    description: >
+      Generate optimized subject lines, preview text, and email copy using AI.
+      Includes A/B testing recommendations and send time optimization.
+    prompt: >
+      You are an AI email copywriter using MisarMail.
+      To help with email content:
+      1. Use ai.subject_lines to generate optimized subject line suggestions.
+      2. Each suggestion includes a predicted open rate score (0-100).
+      3. Recommend A/B testing the top 2 subjects using abtest.create.
+      4. Suggest send times based on audience engagement patterns.
+      Keep subject lines under 50 characters for mobile. Avoid spam trigger words.
+    tools: [ai.subject_lines, abtest.create, abtest.winner]
+    examples:
+      - "Generate subject lines for our Black Friday sale"
+      - "Create an A/B test for this campaign's subject line"
+      - "Which subject line won the A/B test?"
+
+  - name: multi_channel_messaging
+    displayName: Multi-Channel Messaging
+    description: >
+      Send messages across email, WhatsApp, and web push notifications.
+      Reach customers on their preferred channel.
+    prompt: >
+      You are a multi-channel messaging assistant using MisarMail.
+      Available channels:
+      1. Email: Use email.send for transactional, campaign.send for marketing.
+      2. WhatsApp: Use channel.whatsapp_send with template_name or free-form body.
+      3. Push: Use channel.push_send for browser push notifications.
+      Ask which channel is preferred. WhatsApp requires template approval for first contact.
+    tools: [email.send, channel.whatsapp_send, channel.push_send]
+    examples:
+      - "Send a WhatsApp message to +1234567890"
+      - "Push a notification about the flash sale"
+      - "Send this update via both email and WhatsApp"
+
+  - name: revenue_analytics
+    displayName: Revenue & Analytics
+    description: >
+      Track ecommerce revenue attribution, generate advanced analytics reports,
+      and monitor newsletter monetization performance.
+    prompt: >
+      You are a revenue analytics specialist using MisarMail.
+      To analyze revenue:
+      1. Use revenue.attribution to see which campaigns drive purchases.
+      2. Use monetization.stats for newsletter subscription/tip/sponsor revenue.
+      3. Use report.generate for cohort analysis, send-time heatmaps, or engagement funnels.
+      4. Use analytics.get for quick campaign performance snapshots.
+      Always include ROI calculations: (revenue - cost) / cost * 100.
+    tools: [revenue.attribution, monetization.stats, report.generate, analytics.get]
+    examples:
+      - "Which campaign generated the most revenue this month?"
+      - "Show me the revenue attribution for the last 30 days"
+      - "Generate a cohort retention report"
+
+examples:
+  - title: Send a transactional email
+    description: Send a password reset or notification email
+    call:
+      tool: email.send
+      arguments:
+        from_email: hello@yourdomain.com
+        from_name: Your App
+        to:
+          - email: user@example.com
+            name: Jane Doe
+        subject: Your password reset link
+        html: "<p>Click <a href='https://example.com/reset'>here</a> to reset your password.</p>"
+
+  - title: List recent inbox emails
+    description: Fetch the 10 most recent emails from your inbox
+    call:
+      tool: email.list
+      arguments:
+        folder: inbox
+        limit: 10
+
+  - title: Get campaign analytics
+    description: Check open and click rates for your last campaign
+    call:
+      tool: analytics.get
+      arguments:
+        period: 30d
+
+  - title: Check IP warmup status
+    description: Monitor warmup progress for email deliverability
+    call:
+      tool: warmup.get
+      arguments: {}
+
+  - title: Add a contact
+    description: Add a new subscriber to your audience
+    call:
+      tool: contact.add
+      arguments:
+        email: subscriber@example.com
+        first_name: Jane
+        last_name: Doe
+        tags: [newsletter, vip]
+
+  # v2.0.0 examples
+  - title: Generate AI subject lines
+    description: Get AI-powered subject line suggestions with predicted scores
+    call:
+      tool: ai.subject_lines
+      arguments:
+        topic: "Black Friday sale - 50% off all plans"
+        tone: "urgent"
+        count: 5
+
+  - title: Check domain DMARC health
+    description: Verify SPF, DKIM, and DMARC configuration for a domain
+    call:
+      tool: dmarc.check
+      arguments:
+        domain: example.com
+
+  - title: Run deliverability audit
+    description: Get a full deliverability score with actionable recommendations
+    call:
+      tool: deliverability.audit
+      arguments: {}
+
+  - title: Create automation workflow
+    description: Build a welcome email series automation
+    call:
+      tool: automation.create
+      arguments:
+        name: "Welcome Series"
+        trigger_type: "signup"
+        description: "3-email welcome sequence for new subscribers"
+
+  - title: Get revenue attribution
+    description: See which campaigns drove purchases in the last 30 days
+    call:
+      tool: revenue.attribution
+      arguments:
+        period: "30d"

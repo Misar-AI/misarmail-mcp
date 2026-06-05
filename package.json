@@ -1,24 +1,36 @@
 {
   "name": "misarmail-mcp-server",
-  "version": "2.0.4",
-  "mcpName": "io.github.mrgulshanyadav/misarmail",
-  "description": "MisarMail MCP Server \u2014 32 tools for AI email marketing via Model Context Protocol",
-  "homepage": "https://docs.misar.io/mail/mcp",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mrgulshanyadav/misarmail-mcp.git"
+  "version": "2.0.5",
+  "mcpName": "io.github.mrgulshanyadav/misarmail-mcp",
+  "description": "MisarMail MCP Server \u2014 32 tools for email marketing via Model Context Protocol",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
   },
-  "license": "MIT",
   "keywords": [
     "mcp",
     "model-context-protocol",
     "email",
-    "email-marketing",
+    "marketing",
     "campaigns",
     "contacts",
     "automation",
-    "deliverability",
     "ai",
-    "misarmail"
-  ]
+    "deliverability",
+    "whatsapp",
+    "analytics"
+  ],
+  "homepage": "https://mail.misar.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrgulshanyadav/misarmail-mcp"
+  },
+  "author": "Misar AI <gulshan@misar.io> (https://misar.io)",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "misarmail-mcp-server": "server.js"
+  }
 }

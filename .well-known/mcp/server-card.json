@@ -1,0 +1,230 @@
+{
+  "serverInfo": {
+    "name": "MisarMail",
+    "version": "1.0.0",
+    "logoUrl": "https://mail.misar.io/logo-light.png"
+  },
+  "authentication": {
+    "required": true,
+    "schemes": ["bearer"]
+  },
+  "tools": [
+    {
+      "name": "email.list",
+      "description": "List emails from the inbox with optional folder and search filters.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "folder": { "type": "string", "enum": ["inbox", "sent", "drafts", "archive", "spam", "trash", "starred"], "description": "Folder to list (default: inbox)" },
+          "limit": { "type": "number", "description": "Number of emails to return (default: 20, max: 50)" },
+          "search": { "type": "string", "description": "Search query across subject and body" }
+        }
+      }
+    },
+    {
+      "name": "email.read",
+      "description": "Read the full content of a specific email by ID. Marks the email as read.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": { "id": { "type": "string", "description": "Email ID (UUID)" } },
+        "required": ["id"]
+      }
+    },
+    {
+      "name": "email.send",
+      "description": "Send an email from one of your verified MisarMail accounts.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": false, "openWorldHint": true },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "from_email": { "type": "string", "description": "Your verified sender email address" },
+          "from_name": { "type": "string", "description": "Sender display name shown to recipients" },
+          "to": { "type": "array", "items": { "type": "object", "properties": { "email": { "type": "string", "description": "Recipient email address" }, "name": { "type": "string", "description": "Recipient display name" } }, "required": ["email"] }, "description": "List of recipients (max 100)" },
+          "subject": { "type": "string", "description": "Email subject line" },
+          "html": { "type": "string", "description": "HTML body content (recommended)" },
+          "text": { "type": "string", "description": "Plain text body content (fallback for HTML)" },
+          "cc": { "type": "array", "items": { "type": "object", "properties": { "email": { "type": "string", "description": "CC recipient email" }, "name": { "type": "string", "description": "CC recipient name" } }, "required": ["email"] }, "description": "CC recipients" },
+          "bcc": { "type": "array", "items": { "type": "object", "properties": { "email": { "type": "string", "description": "BCC recipient email" }, "name": { "type": "string", "description": "BCC recipient name" } }, "required": ["email"] }, "description": "BCC recipients" }
+        },
+        "required": ["from_email", "to", "subject"]
+      }
+    },
+    {
+      "name": "email.reply",
+      "description": "Reply to an existing email thread.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": false, "openWorldHint": true },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "email_id": { "type": "string", "description": "ID of the email to reply to" },
+          "html": { "type": "string", "description": "HTML reply body content" },
+          "text": { "type": "string", "description": "Plain text reply body content" }
+        },
+        "required": ["email_id"]
+      }
+    },
+    {
+      "name": "email.archive",
+      "description": "Move an email to the archive folder.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": { "id": { "type": "string", "description": "Email ID to archive" } },
+        "required": ["id"]
+      }
+    },
+    {
+      "name": "campaign.list",
+      "description": "List email marketing campaigns.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["draft", "scheduled", "sending", "sent", "paused", "cancelled"], "description": "Filter campaigns by status" },
+          "limit": { "type": "number", "description": "Number of campaigns to return (default: 20)" }
+        }
+      }
+    },
+    {
+      "name": "campaign.get",
+      "description": "Get details and stats for a specific campaign.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": { "id": { "type": "string", "description": "Campaign ID (UUID)" } },
+        "required": ["id"]
+      }
+    },
+    {
+      "name": "campaign.create",
+      "description": "Create a new email marketing campaign (saved as draft).",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": false, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Internal campaign name for identification" },
+          "subject": { "type": "string", "description": "Email subject line shown to recipients" },
+          "from_email": { "type": "string", "description": "Sender email address (must be verified)" },
+          "from_name": { "type": "string", "description": "Sender display name shown to recipients" },
+          "body_html": { "type": "string", "description": "HTML email body content" },
+          "body_text": { "type": "string", "description": "Plain text email body (fallback for HTML)" }
+        },
+        "required": ["name", "subject", "from_email"]
+      }
+    },
+    {
+      "name": "campaign.send",
+      "description": "Send or schedule an existing draft campaign to all recipients.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": true, "idempotentHint": false, "openWorldHint": true },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "Campaign ID to send" },
+          "scheduled_at": { "type": "string", "description": "ISO 8601 datetime to schedule (omit to send immediately)" }
+        },
+        "required": ["id"]
+      }
+    },
+    {
+      "name": "contact.list",
+      "description": "List contacts in your audience.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["subscribed", "unsubscribed", "bounced", "complained"], "description": "Filter contacts by subscription status" },
+          "search": { "type": "string", "description": "Search by email address, name, or tags" },
+          "limit": { "type": "number", "description": "Number of contacts to return (default: 20, max: 100)" }
+        }
+      }
+    },
+    {
+      "name": "contact.add",
+      "description": "Add a new contact to your audience.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "description": "Contact email address (must be valid email format)" },
+          "first_name": { "type": "string", "description": "Contact's first name" },
+          "last_name": { "type": "string", "description": "Contact's last name" },
+          "tags": { "type": "array", "items": { "type": "string" }, "description": "Tags to categorize this contact (e.g. ['newsletter', 'vip'])" }
+        },
+        "required": ["email"]
+      }
+    },
+    {
+      "name": "contact.update",
+      "description": "Update an existing contact's details.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "description": "Contact email address (used as identifier)" },
+          "first_name": { "type": "string", "description": "Updated first name" },
+          "last_name": { "type": "string", "description": "Updated last name" },
+          "tags": { "type": "array", "items": { "type": "string" }, "description": "Updated tags (replaces existing tags)" },
+          "status": { "type": "string", "enum": ["subscribed", "unsubscribed"], "description": "Updated subscription status" }
+        },
+        "required": ["email"]
+      }
+    },
+    {
+      "name": "template.create",
+      "description": "Create a reusable email template.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": false, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Template name for identification" },
+          "subject": { "type": "string", "description": "Default email subject line" },
+          "body_html": { "type": "string", "description": "HTML template body (supports {{variable}} merge tag syntax)" },
+          "body_text": { "type": "string", "description": "Plain text version of the template" },
+          "template_type": { "type": "string", "enum": ["marketing", "transactional", "automation"], "description": "Template category (default: transactional)" }
+        },
+        "required": ["name", "subject"]
+      }
+    },
+    {
+      "name": "analytics.get",
+      "description": "Get sending analytics and campaign performance metrics.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "7d", "30d", "90d"], "description": "Time period for analytics (default: 30d)" },
+          "campaign_id": { "type": "string", "description": "Filter analytics to a specific campaign ID (optional)" }
+        }
+      }
+    },
+    {
+      "name": "warmup.get",
+      "description": "Check the IP warm-up status for your sending infrastructure.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": { "type": "object", "properties": {} }
+    },
+    {
+      "name": "key.list",
+      "description": "List your active MisarMail API keys with their scopes and usage.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+      "inputSchema": { "type": "object", "properties": {} }
+    }
+  ],
+  "prompts": [
+    {
+      "name": "compose_email",
+      "description": "Compose a professional email ready to send via MisarMail."
+    },
+    {
+      "name": "campaign_performance_report",
+      "description": "Summarize campaign analytics and suggest improvements."
+    },
+    {
+      "name": "contact_import_guide",
+      "description": "Step-by-step guide to import and organize contacts in MisarMail."
+    }
+  ],
+  "resources": []
+}
