@@ -3,7 +3,7 @@
   <h1>MisarMail MCP Server</h1>
   <p>Full email marketing platform accessible via Model Context Protocol</p>
 
-  [![npm version](https://img.shields.io/npm/v/misarmail-mcp-server?label=npm&color=cb3837)](https://npmjs.com/package/misarmail-mcp-server)
+  [![npm version](https://img.shields.io/npm/v/@misarmail/mcp?label=npm&color=cb3837)](https://npmjs.com/package/@misarmail/mcp)
   [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
   [![Tools: 32](https://img.shields.io/badge/tools-32-brightgreen)](README.md#tools-reference)
   [![Skills: 11](https://img.shields.io/badge/skills-11-purple)](README.md#skills)
@@ -122,7 +122,7 @@ Then point your client to `http://localhost:3000`.
 Run the MCP server directly without Docker:
 
 ```bash
-npx misarmail-mcp-server
+npx @misarmail/mcp
 ```
 
 ---
@@ -234,7 +234,7 @@ MisarMail MCP is available on all major registries:
 
 | Platform | Link |
 |---|---|
-| **npm** | [npmjs.com/package/misarmail-mcp-server](https://npmjs.com/package/misarmail-mcp-server) |
+| **npm** | [npmjs.com/package/@misarmail/mcp](https://npmjs.com/package/@misarmail/mcp) |
 | **Smithery** | [smithery.ai/server/misarmail/misarmail](https://smithery.ai/server/misarmail/misarmail) |
 | **mcp.so** | [mcp.so/server/misarmail](https://mcp.so/server/misarmail) |
 | **mcpservers.org** | [mcpservers.org/server/misarmail](https://mcpservers.org/server/misarmail) |
@@ -250,7 +250,7 @@ MisarMail MCP is available on all major registries:
 
 - **Website**: [mail.misar.io](https://mail.misar.io)
 - **Documentation**: [mail.misar.io/docs](https://mail.misar.io/docs)
-- **npm**: [npmjs.com/package/misarmail-mcp-server](https://npmjs.com/package/misarmail-mcp-server)
+- **npm**: [npmjs.com/package/@misarmail/mcp](https://npmjs.com/package/@misarmail/mcp)
 - **Smithery**: [smithery.ai/server/misarmail/misarmail](https://smithery.ai/server/misarmail/misarmail)
 - **Author**: [Misar AI](https://misar.io)
 
