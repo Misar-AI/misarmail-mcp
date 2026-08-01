@@ -1,8 +1,23 @@
 {
-  "mcpServers": {
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "misarmail-key",
+      "description": "MisarMail API key (msk_…) — create one at https://mail.misar.io/developers",
+      "password": true
+    }
+  ],
+  "servers": {
     "misarmail": {
-      "url": "https://mail.misar.io/api/mcp",
-      "transport": "http"
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@misarmail/mcp@latest"
+      ],
+      "env": {
+        "MISARMAIL_API_KEY": "${input:misarmail-key}"
+      }
     }
   }
 }

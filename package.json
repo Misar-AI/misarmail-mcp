@@ -1,39 +1,98 @@
 {
   "name": "@misarmail/mcp",
-  "version": "2.0.6",
+  "version": "3.0.0",
   "mcpName": "io.github.mrgulshanyadav/misarmail-mcp",
-  "description": "MisarMail MCP Server — 32 tools for email marketing via Model Context Protocol",
-  "main": "server.js",
+  "description": "MisarMail MCP server — send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability from Claude, Cursor, VS Code, Windsurf, and any MCP client.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./http": {
+      "types": "./dist/http.d.ts",
+      "import": "./dist/http.js"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts",
+      "import": "./dist/registry.js"
+    }
+  },
+  "bin": {
+    "misarmail-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "smithery.yaml",
+    "server.json",
+    "README.md",
+    "skills",
+    "prompts",
+    "connectors"
+  ],
   "scripts": {
-    "start": "node server.js"
+    "build": "tsc && chmod +x dist/index.js",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build"
   },
   "keywords": [
     "mcp",
+    "mcp-server",
     "model-context-protocol",
     "email",
-    "marketing",
+    "email-marketing",
+    "email-api",
+    "transactional-email",
     "campaigns",
+    "newsletter",
     "contacts",
+    "crm",
     "automation",
-    "ai",
+    "drip-campaign",
+    "ab-testing",
     "deliverability",
-    "whatsapp",
-    "analytics"
+    "dmarc",
+    "spf",
+    "dkim",
+    "inbox",
+    "smtp",
+    "analytics",
+    "claude",
+    "claude-code",
+    "cursor",
+    "windsurf",
+    "vscode",
+    "ai-agent",
+    "misarmail"
   ],
-  "homepage": "https://mail.misar.io",
+  "homepage": "https://www.misarmail.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mrgulshanyadav/misarmail-mcp"
+    "url": "git+https://github.com/mrgulshanyadav/misarmail-mcp.git"
   },
-  "author": "Misar AI <gulshan@misar.io> (https://misar.io)",
+  "bugs": {
+    "url": "https://github.com/mrgulshanyadav/misarmail-mcp/issues"
+  },
+  "author": "Misar AI <support@misar.io>",
   "license": "MIT",
-  "engines": {
-    "node": ">=18"
-  },
   "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "bin": {
-    "misarmail-mcp": "server.js"
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.0.4"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

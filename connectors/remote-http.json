@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "misarmail": {
+      "type": "streamable-http",
+      "url": "https://api.misar.io/mail/mcp",
+      "headers": {
+        "Authorization": "Bearer msk_YOUR_KEY_HERE"
+      }
+    }
+  }
+}

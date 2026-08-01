@@ -1,0 +1,7 @@
+{
+  "qualifiedName": "misar/misarmail-mcp",
+  "install": "npx -y @smithery/cli install misar/misarmail-mcp --client claude",
+  "config": {
+    "apiKey": "msk_YOUR_KEY_HERE"
+  }
+}

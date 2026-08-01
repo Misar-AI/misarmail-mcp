@@ -1,0 +1,33 @@
+{
+  "name": "misarmail",
+  "version": "3.0.0",
+  "description": "Send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability — from any AI assistant.",
+  "author": {
+    "name": "Misar AI",
+    "email": "support@misar.io",
+    "url": "https://misar.io"
+  },
+  "homepage": "https://www.misarmail.com",
+  "repository": "https://github.com/mrgulshanyadav/misarmail-mcp",
+  "license": "MIT",
+  "keywords": [
+    "email",
+    "marketing",
+    "productivity",
+    "communication",
+    "automation",
+    "analytics"
+  ],
+  "mcpServers": {
+    "misarmail": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@misarmail/mcp@latest"
+      ],
+      "env": {
+        "MISARMAIL_API_KEY": "${MISARMAIL_API_KEY}"
+      }
+    }
+  }
+}

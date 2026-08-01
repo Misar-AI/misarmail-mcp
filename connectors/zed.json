@@ -1,0 +1,16 @@
+{
+  "context_servers": {
+    "misarmail": {
+      "command": {
+        "path": "npx",
+        "args": [
+          "-y",
+          "@misarmail/mcp@latest"
+        ],
+        "env": {
+          "MISARMAIL_API_KEY": "msk_YOUR_KEY_HERE"
+        }
+      }
+    }
+  }
+}

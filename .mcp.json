@@ -7,7 +7,7 @@
         "@misarmail/mcp@latest"
       ],
       "env": {
-        "MISARMAIL_API_KEY": "msk_YOUR_KEY_HERE"
+        "MISARMAIL_API_KEY": "${MISARMAIL_API_KEY}"
       }
     }
   }

@@ -1,13 +1,19 @@
-FROM node:20-alpine
-
+# Build and run the MisarMail MCP server over stdio.
+FROM node:20-alpine AS build
 WORKDIR /app
+COPY package.json tsconfig.json ./
+RUN npm install --ignore-scripts
+COPY src ./src
+RUN npx tsc
 
-COPY server.json ./
-COPY server.js ./
+FROM node:20-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package.json ./
+RUN npm install --omit=dev --ignore-scripts
+COPY --from=build /app/dist ./dist
+COPY skills ./skills
 
-EXPOSE 3000
-
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-  CMD wget -q --spider http://localhost:3000/health || exit 1
-
-CMD ["node", "server.js"]
+# stdio transport: the client owns the process lifecycle, so there is no port
+# to expose and no HTTP healthcheck to run.
+ENTRYPOINT ["node", "dist/index.js"]

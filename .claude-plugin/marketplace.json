@@ -1,0 +1,22 @@
+{
+  "name": "misar",
+  "owner": {
+    "name": "Misar AI",
+    "email": "support@misar.io",
+    "url": "https://misar.io"
+  },
+  "metadata": {
+    "description": "Official Misar AI plugins — email, publishing, and growth tooling for AI agents.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "misarmail",
+      "source": "https://github.com/mrgulshanyadav/misarmail-mcp",
+      "description": "Send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability — from any AI assistant.",
+      "version": "3.0.0",
+      "category": "email",
+      "strict": false
+    }
+  ]
+}

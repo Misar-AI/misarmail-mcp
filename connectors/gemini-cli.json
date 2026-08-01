@@ -8,13 +8,9 @@
       ],
       "env": {
         "MISARMAIL_API_KEY": "msk_YOUR_KEY_HERE"
-      }
-    },
-    "misarmail-remote": {
-      "url": "https://api.misar.io/mail/mcp",
-      "headers": {
-        "Authorization": "Bearer msk_YOUR_KEY_HERE"
-      }
+      },
+      "timeout": 30000,
+      "trust": false
     }
   }
 }
