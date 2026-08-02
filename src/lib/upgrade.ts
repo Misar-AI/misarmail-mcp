@@ -23,6 +23,23 @@ export interface UpgradePlanOption {
   url: string;
 }
 
+export interface TrialOffer {
+  available: boolean;
+  plan_slug: string;
+  plan_name: string;
+  days: number;
+  start_url: string;
+  requires_card: boolean;
+  label: string;
+}
+
+export interface CrossSellOffer {
+  product: string;
+  product_name: string;
+  headline: string;
+  url: string;
+}
+
 export interface UpgradeOffer {
   product_name: string;
   reason: "quota_exhausted" | "feature_locked" | "overage_capped" | "credits_exhausted";
@@ -45,8 +62,11 @@ export interface UpgradeOffer {
     required_credits: number;
     options: { amount_dollars: number; label: string; url: string }[];
   } | null;
+  trial?: TrialOffer | null;
+  cross_sell?: CrossSellOffer[];
   urls: { pricing: string; billing: string; docs: string; compare: string };
   cta: string;
+  event_id?: string | null;
 }
 
 /** Extract the offer from an arbitrary API error body, if present. */
@@ -136,6 +156,21 @@ export function renderUpgradeOffer(offer: UpgradeOffer): string {
   out.push(field("Plan", offer.current_plan.name));
   out.push("");
 
+  // ── Trial first: the cheapest possible "yes" ──────────────────────────────
+  // Shown ABOVE the paid plans deliberately. The user is mid-task with maximum
+  // intent; a no-card trial converts that moment far better than a price tag.
+  if (offer.trial?.available) {
+    out.push(`  ${rule("┄")}`);
+    out.push("");
+    out.push(`  ✨ ${offer.trial.label}`);
+    out.push(
+      `     Start a ${offer.trial.days}-day ${offer.trial.plan_name} trial` +
+        `${offer.trial.requires_card ? "" : " — no card required"} and keep going now.`,
+    );
+    out.push(`     Run: upgrade start_trial=true`);
+    out.push("");
+  }
+
   if (offer.plans.length > 0) {
     out.push(`  ${rule("┄")}`);
     out.push("");
@@ -174,6 +209,19 @@ export function renderUpgradeOffer(offer: UpgradeOffer): string {
     for (const option of offer.topup.options) {
       out.push(`  ▸ ${option.label}`);
       out.push(`    → ${option.url}`);
+    }
+    out.push("");
+  }
+
+  // Sibling products that solve the need behind this limit. Curated and capped
+  // at two — past that the card stops reading as help and starts reading as an ad.
+  if (offer.cross_sell && offer.cross_sell.length > 0) {
+    out.push(`  ${rule("┄")}`);
+    out.push("");
+    out.push("  You might also need:");
+    for (const item of offer.cross_sell) {
+      out.push(`  ▸ ${item.product_name} — ${item.headline}`);
+      out.push(`    → ${item.url}`);
     }
     out.push("");
   }

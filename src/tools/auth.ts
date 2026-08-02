@@ -85,7 +85,7 @@ async function runLogin(args: Record<string, unknown>): Promise<string> {
   const existing = tryGetApiKey();
   if (!force && existing) {
     try {
-      await apiFetch({ apiKey: existing, baseUrl: getBaseUrl(), source: "mcp_stdio" }, "/account");
+      await apiFetch({ apiKey: existing, baseUrl: getBaseUrl(), source: "mcp_stdio" }, "/keys");
       return "Already authenticated. Call `login` with force=true to connect a different account or issue a new key.";
     } catch {
       // Stored key rejected — fall through and re-authenticate.
@@ -258,11 +258,20 @@ export const authTools: ToolDefinition[] = [
         };
       }
       try {
-        const account = await apiFetch<Record<string, unknown>>(
+        // Probes /keys rather than /account: MisarMail exposes no account or
+        // "me" endpoint under /v1, so the previous probe 404'd and reported a
+        // perfectly valid key as rejected. /keys requires a valid key and
+        // returns only metadata, never a secret.
+        const keys = await apiFetch<unknown>(
           { apiKey: key, baseUrl, source: "mcp_stdio" },
-          "/account",
+          "/keys",
         );
-        return { authenticated: true, base_url: baseUrl, account };
+        const count = Array.isArray(keys)
+          ? keys.length
+          : Array.isArray((keys as { data?: unknown[] })?.data)
+            ? (keys as { data: unknown[] }).data.length
+            : undefined;
+        return { authenticated: true, base_url: baseUrl, api_keys_on_account: count };
       } catch (err) {
         return {
           authenticated: false,

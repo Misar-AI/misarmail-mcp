@@ -1,5 +1,6 @@
 import type { McpContext } from "./context.js";
 import { apiError } from "./errors.js";
+import { noteUsage } from "./usage.js";
 
 export function buildQuery(params: Record<string, unknown>): string {
   const entries = Object.entries(params).filter(
@@ -24,6 +25,10 @@ async function request<T>(
       ...options.headers,
     },
   });
+  // Record remaining allowance before anything can throw, so a tool can append
+  // the 80% warning to its successful output.
+  noteUsage(res.headers);
+
   const body = await res.json().catch(() => ({}));
   if (!res.ok) throw apiError(res.status, body);
   return body as T;

@@ -10,7 +10,7 @@ import {
   ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-import { ALL_TOOLS, dispatch, listTools, resolveTool } from "./registry.js";
+import { ALL_TOOLS, dispatch, listTools, resolveTool, UnknownToolError } from "./registry.js";
 import { authTools } from "./tools/auth.js";
 import { listPrompts, getPrompt } from "./prompts.js";
 import { listResources, readResource } from "./resources.js";
@@ -74,9 +74,24 @@ function buildServer(): Server {
       // through stdioContext() — that is exactly the call that throws when the
       // user has not logged in yet.
       const local = STDIO_ONLY_BY_NAME.get(name);
-      const data = local
-        ? await local.handler(UNAUTHENTICATED_CTX, args as Record<string, unknown>)
-        : await dispatch(name, args as Record<string, unknown>, stdioContext());
+      if (local) {
+        const data = await local.handler(UNAUTHENTICATED_CTX, args as Record<string, unknown>);
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: typeof data === "string" ? data : JSON.stringify(data, null, 2),
+            },
+          ],
+        };
+      }
+
+      // Resolve the tool BEFORE the credentials. Evaluating stdioContext() as a
+      // call argument meant an unauthenticated user who mistyped a tool name got
+      // "Not authenticated" — sending them to fix their key instead of their typo.
+      if (!resolveTool(name)) throw new UnknownToolError(name);
+
+      const data = await dispatch(name, args as Record<string, unknown>, stdioContext());
       return {
         content: [
           {

@@ -163,3 +163,15 @@ describe("prompts and resources", () => {
     }
   });
 });
+
+describe("stdio error clarity", () => {
+  it("reports an unknown tool as unknown, not as an auth failure", async () => {
+    // The stdio entry point resolves the tool BEFORE reading credentials.
+    // Passing stdioContext() as a call argument evaluated it first, so an
+    // unauthenticated user who mistyped a tool name was told to fix their API
+    // key rather than their typo.
+    await expect(dispatch("__typo__", {}, ctx)).rejects.toBeInstanceOf(UnknownToolError);
+    expect(resolveTool("__typo__")).toBeUndefined();
+    expect(resolveTool("list_campaigns")).toBeDefined();
+  });
+});

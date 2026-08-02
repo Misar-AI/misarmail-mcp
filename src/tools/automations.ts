@@ -1,6 +1,13 @@
-import { apiFetchRoot, buildQuery, unwrap } from "../lib/api-client.js";
+import { apiFetch, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
+/**
+ * Automation tools target the VERSIONED routes.
+ *
+ * `/api/automations` authenticates with a Supabase session only, so every call
+ * from an MCP client returned "Unauthorized" — verified against production.
+ * `/api/v1/automations` accepts API keys and is the only path that works here.
+ */
 export const automationTools: ToolDefinition[] = [
   defineTool({
     name: "list_automations",
@@ -28,7 +35,7 @@ export const automationTools: ToolDefinition[] = [
     },
     handler: async (ctx, args) =>
       unwrap(
-        await apiFetchRoot(
+        await apiFetch(
           ctx,
           `/automations${buildQuery({ page: args.page, limit: args.limit, status: args.status })}`,
         ),
@@ -54,7 +61,7 @@ export const automationTools: ToolDefinition[] = [
     },
     handler: async (ctx, args) =>
       unwrap(
-        await apiFetchRoot(ctx, `/automations/${encodeURIComponent(String(args.automation_id))}`),
+        await apiFetch(ctx, `/automations/${encodeURIComponent(String(args.automation_id))}`),
       ),
   }),
 
@@ -108,7 +115,7 @@ export const automationTools: ToolDefinition[] = [
       },
     },
     handler: (ctx, args) =>
-      apiFetchRoot(ctx, "/automations", { method: "POST", body: JSON.stringify(args) }),
+      apiFetch(ctx, "/automations", { method: "POST", body: JSON.stringify(args) }),
   }),
 
   defineTool({
@@ -133,7 +140,7 @@ export const automationTools: ToolDefinition[] = [
       },
     },
     handler: (ctx, args) =>
-      apiFetchRoot(ctx, `/automations/${encodeURIComponent(String(args.automation_id))}`, {
+      apiFetch(ctx, `/automations/${encodeURIComponent(String(args.automation_id))}`, {
         method: "PATCH",
         body: JSON.stringify({ active: args.active }),
       }),

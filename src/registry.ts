@@ -1,4 +1,5 @@
 import type { McpContext } from "./lib/context.js";
+import { takeUsageFooter } from "./lib/usage.js";
 import type { ToolDefinition, ToolScope } from "./lib/types.js";
 
 import { emailTools } from "./tools/email.js";
@@ -141,7 +142,28 @@ export async function dispatch(
     throw new MissingScopeError(tool.scopes);
   }
 
-  return tool.handler(ctx, args);
+  const result = await tool.handler(ctx, args);
+
+  // Pre-emptive usage warning, appended centrally so every tool benefits
+  // without each one having to remember. Only fires once the caller crosses 80%
+  // of a metered allowance; below that `takeUsageFooter()` returns null and the
+  // result is passed through untouched.
+  //
+  // `upgrade` is exempt: it already renders the full quota table, so a footer
+  // would just repeat what the user is looking at.
+  if (tool.name !== "upgrade") {
+    const footer = takeUsageFooter();
+    if (footer) {
+      if (typeof result === "string") return `${result}${footer}`;
+      // Structured results keep their shape; the warning rides alongside so
+      // clients that render JSON still surface it.
+      if (result && typeof result === "object" && !Array.isArray(result)) {
+        return { ...(result as Record<string, unknown>), usage_notice: footer.trim() };
+      }
+    }
+  }
+
+  return result;
 }
 
 export { type ToolDefinition, type ToolScope } from "./lib/types.js";
