@@ -10,6 +10,7 @@ import { listResources, readResource } from "./resources.js";
 import { httpContext } from "./lib/context.js";
 import { formatError } from "./lib/errors.js";
 import { SERVER_PROTOCOL_VERSION } from "./protocol.js";
+import { authGuidance } from "./lib/auth-guidance.js";
 
 /**
  * Transport-agnostic Streamable HTTP (JSON-RPC 2.0) handler for MisarMail MCP.
@@ -150,7 +151,7 @@ export function createHttpHandler(options: HttpHandlerOptions) {
     if (!caller) {
       // RFC 9728: WWW-Authenticate lets OAuth-capable clients discover how to
       // authenticate instead of treating this as a hard failure.
-      return fail(null, -32001, "Unauthorized: provide Authorization: Bearer msk_<key>", {
+      return fail(null, -32001, authGuidance("missing"), {
         status: 401,
         headers: {
           "WWW-Authenticate": 'Bearer realm="MisarMail"',

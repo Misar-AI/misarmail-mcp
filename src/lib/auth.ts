@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { DEFAULT_BASE_URL, type McpContext } from "./context.js";
+import { authGuidance } from "./auth-guidance.js";
 
 /**
  * stdio-transport credential storage.
@@ -70,11 +71,10 @@ export function tryGetApiKey(): string | null {
 export function stdioContext(): McpContext {
   const apiKey = tryGetApiKey();
   if (!apiKey) {
-    throw new Error(
-      "Not authenticated. Set the MISARMAIL_API_KEY environment variable, or run the " +
-        "`login` tool to connect your MisarMail account via browser. " +
-        "Create a key at https://mail.misar.io/developers",
-    );
+    // The full guidance block, not a one-liner: this text is relayed verbatim
+    // to the end user by their MCP client and is the only authentication UX
+    // they get. See src/lib/auth-guidance.ts (generated).
+    throw new Error(authGuidance("missing"));
   }
   return { apiKey, baseUrl: getBaseUrl(), source: "mcp_stdio" };
 }

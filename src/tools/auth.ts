@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { saveConfig, tryGetApiKey, getBaseUrl } from "../lib/auth.js";
 import { apiFetch } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
+import { authGuidance } from "../lib/auth-guidance.js";
 
 /**
  * Browser-based authentication for the stdio transport.
@@ -254,7 +255,7 @@ export const authTools: ToolDefinition[] = [
         return {
           authenticated: false,
           base_url: baseUrl,
-          next_step: "Run the `login` tool to authorize via browser, or set MISARMAIL_API_KEY.",
+          next_step: authGuidance("missing"),
         };
       }
       try {
@@ -277,7 +278,7 @@ export const authTools: ToolDefinition[] = [
           authenticated: false,
           base_url: baseUrl,
           error: err instanceof Error ? err.message : String(err),
-          next_step: "The stored key was rejected. Run `login` with force=true to reconnect.",
+          next_step: authGuidance("rejected"),
         };
       }
     },

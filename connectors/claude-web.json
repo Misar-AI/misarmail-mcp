@@ -1,0 +1,11 @@
+{
+  "note": "Claude.ai → Settings → Connectors → Add custom connector",
+  "name": "MisarMail",
+  "remote_mcp_url": "https://api.misar.io/mail/mcp",
+  "authentication": {
+    "type": "bearer",
+    "header": "Authorization",
+    "value": "Bearer msk_YOUR_KEY_HERE",
+    "obtain_at": "https://mail.misar.io/developers"
+  }
+}
