@@ -78,8 +78,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/mrgulshanyadav/misarmail-mcp:${{ steps.version.outputs.tag }}
-            ghcr.io/mrgulshanyadav/misarmail-mcp:latest
+            ghcr.io/misar-ai/misarmail-mcp:${{ steps.version.outputs.tag }}
+            ghcr.io/misar-ai/misarmail-mcp:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

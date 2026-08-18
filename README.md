@@ -196,6 +196,6 @@ Every action does.
 - Documentation — https://docs.misar.io/mail/mcp
 - Smithery — https://smithery.ai/server/misar/misarmail-mcp
 - npm — https://www.npmjs.com/package/@misarmail/mcp
-- Source — https://github.com/mrgulshanyadav/misarmail-mcp
+- Source — https://github.com/Misar-AI/misarmail-mcp
 
 MIT © [Misar AI](https://misar.io)

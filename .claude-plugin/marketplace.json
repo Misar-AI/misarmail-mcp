@@ -12,7 +12,7 @@
   "plugins": [
     {
       "name": "misarmail",
-      "source": "https://github.com/mrgulshanyadav/misarmail-mcp",
+      "source": "https://github.com/Misar-AI/misarmail-mcp",
       "description": "Send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability — from any AI assistant.",
       "version": "3.0.0",
       "category": "email",

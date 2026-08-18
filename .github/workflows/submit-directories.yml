@@ -68,7 +68,7 @@ jobs:
             --body "## Add MisarMail MCP Server
 
           **Name**: MisarMail MCP Server
-          **Repository**: https://github.com/mrgulshanyadav/misarmail-mcp
+          **Repository**: https://github.com/Misar-AI/misarmail-mcp
           **npm**: https://www.npmjs.com/package/@misarmail/mcp
           **Category**: Email / Marketing
 
@@ -130,7 +130,7 @@ jobs:
             --title "Add MisarMail MCP Server" \
             --body "## MisarMail MCP Server
 
-          - **Repository**: https://github.com/mrgulshanyadav/misarmail-mcp
+          - **Repository**: https://github.com/Misar-AI/misarmail-mcp
           - **npm**: https://www.npmjs.com/package/@misarmail/mcp
           - **Category**: Email / Marketing
           - **Tools**: 32 tools — campaigns, contacts, templates, automations, analytics, deliverability, WhatsApp
@@ -158,7 +158,7 @@ jobs:
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             -X POST https://mcpmarket.com/api/submit-url \
             -H "Content-Type: application/json" \
-            -d '{"url":"https://github.com/mrgulshanyadav/misarmail-mcp"}')
+            -d '{"url":"https://github.com/Misar-AI/misarmail-mcp"}')
           echo "HTTP status: ${HTTP_STATUS}"
           {
             echo "### mcpmarket.com"
@@ -175,7 +175,7 @@ jobs:
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             -X POST https://mcpserverhub.net/api/submit \
             -H "Content-Type: application/json" \
-            -d '{"name":"MisarMail MCP Server","url":"https://github.com/mrgulshanyadav/misarmail-mcp","category":"email","config":{"command":"npx","args":["@misarmail/mcp"],"env":{"MISARMAIL_API_KEY":"<your_key>"}}}')
+            -d '{"name":"MisarMail MCP Server","url":"https://github.com/Misar-AI/misarmail-mcp","category":"email","config":{"command":"npx","args":["@misarmail/mcp"],"env":{"MISARMAIL_API_KEY":"<your_key>"}}}')
           echo "HTTP status: ${HTTP_STATUS}"
           {
             echo "### mcpserverhub.net"
