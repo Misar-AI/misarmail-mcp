@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.misar-ai/misarmail-mcp",
   "title": "MisarMail MCP Server",
-  "description": "Send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability \u2014 from any AI assistant.",
+  "description": "Send transactional email, run campaigns, manage contacts and automations, audit deliverability.",
   "version": "5.0.3",
   "repository": {
     "url": "https://github.com/Misar-AI/misarmail-mcp",
