@@ -12,13 +12,13 @@ jobs:
     steps:
       - name: Check npm version
         run: |
-          VERSION=$(npm view misarmail-mcp-server version 2>/dev/null || echo "not found")
+          VERSION=$(npm view @misarmail/mcp version 2>/dev/null || echo "not found")
           echo "npm version: $VERSION"
           {
             echo "### npm Registry"
-            echo "- Package: \`misarmail-mcp-server\`"
+            echo "- Package: \`@misarmail/mcp\`"
             echo "- Published version: \`${VERSION}\`"
-            echo "- URL: https://www.npmjs.com/package/misarmail-mcp-server"
+            echo "- URL: https://www.npmjs.com/package/@misarmail/mcp"
           } >> "$GITHUB_STEP_SUMMARY"
 
   probe-smithery:
@@ -69,7 +69,7 @@ jobs:
 
           **Name**: MisarMail MCP Server
           **Repository**: https://github.com/mrgulshanyadav/misarmail-mcp
-          **npm**: https://www.npmjs.com/package/misarmail-mcp-server
+          **npm**: https://www.npmjs.com/package/@misarmail/mcp
           **Category**: Email / Marketing
 
           ### Description
@@ -81,7 +81,7 @@ jobs:
             \"mcpServers\": {
               \"misarmail\": {
                 \"command\": \"npx\",
-                \"args\": [\"misarmail-mcp-server\"],
+                \"args\": [\"@misarmail/mcp\"],
                 \"env\": { \"MISARMAIL_API_KEY\": \"msk_your_key\" }
               }
             }
@@ -131,7 +131,7 @@ jobs:
             --body "## MisarMail MCP Server
 
           - **Repository**: https://github.com/mrgulshanyadav/misarmail-mcp
-          - **npm**: https://www.npmjs.com/package/misarmail-mcp-server
+          - **npm**: https://www.npmjs.com/package/@misarmail/mcp
           - **Category**: Email / Marketing
           - **Tools**: 32 tools — campaigns, contacts, templates, automations, analytics, deliverability, WhatsApp
           - **License**: MIT
@@ -175,7 +175,7 @@ jobs:
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             -X POST https://mcpserverhub.net/api/submit \
             -H "Content-Type: application/json" \
-            -d '{"name":"MisarMail MCP Server","url":"https://github.com/mrgulshanyadav/misarmail-mcp","category":"email","config":{"command":"npx","args":["misarmail-mcp-server"],"env":{"MISARMAIL_API_KEY":"<your_key>"}}}')
+            -d '{"name":"MisarMail MCP Server","url":"https://github.com/mrgulshanyadav/misarmail-mcp","category":"email","config":{"command":"npx","args":["@misarmail/mcp"],"env":{"MISARMAIL_API_KEY":"<your_key>"}}}')
           echo "HTTP status: ${HTTP_STATUS}"
           {
             echo "### mcpserverhub.net"
