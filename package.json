@@ -38,7 +38,7 @@
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "mcp",
