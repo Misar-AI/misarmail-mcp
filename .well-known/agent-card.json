@@ -1,0 +1,67 @@
+{
+  "name": "MisarMail MCP Server",
+  "description": "Send transactional email, run multi-step campaigns, manage contacts, segments and automations, A/B test, warm up domains and audit deliverability — from any AI assistant.",
+  "supportedInterfaces": [
+    {
+      "url": "https://mail.misar.io/api/mcp",
+      "protocolBinding": "mcp",
+      "protocolVersion": "2025-06-18"
+    }
+  ],
+  "provider": {
+    "organization": "Misar AI",
+    "url": "https://www.misarmail.com"
+  },
+  "version": "5.1.1",
+  "documentationUrl": "https://github.com/Misar-AI/misarmail-mcp",
+  "iconUrl": "https://raw.githubusercontent.com/Misar-AI/misarmail-mcp/main/assets/icon-400.png",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "extendedAgentCard": false
+  },
+  "defaultInputModes": [
+    "application/json",
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "application/json",
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "misarmail.email_operations",
+      "name": "Email marketing and transactional email",
+      "tags": [
+        "email-marketing",
+        "transactional-email",
+        "campaigns",
+        "contacts",
+        "deliverability",
+        "mcp"
+      ],
+      "examples": [
+        "Send the welcome email to this new customer.",
+        "Which campaign had the best open rate last month?",
+        "Audit deliverability for our sending domain before the next send."
+      ],
+      "description": "Send transactional email, run multi-step campaigns, manage contacts, segments and automations, A/B test, warm up domains and audit deliverability — from any AI assistant. Exposed as 54 MCP tools; every tool carries behavioural annotations describing whether it reads, writes, or is destructive."
+    }
+  ],
+  "securitySchemes": {
+    "apiKey": {
+      "type": "http",
+      "scheme": "bearer",
+      "description": "MisarMail API key (prefix msk_), sent as a bearer token or as ?apiKey=. Also readable from MISARMAIL_API_KEY on the stdio server. Discovery methods answer without it; every tool call requires it."
+    }
+  },
+  "securityRequirements": [
+    {
+      "schemes": {
+        "apiKey": {
+          "values": []
+        }
+      }
+    }
+  ]
+}
