@@ -1,8 +1,8 @@
 {
   "name": "@misarmail/mcp",
-  "version": "5.0.4",
+  "version": "5.1.0",
   "mcpName": "io.github.Misar-AI/misarmail-mcp",
-  "description": "MisarMail MCP server \u2014 send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability from Claude, Cursor, VS Code, Windsurf, and any MCP client.",
+  "description": "MisarMail MCP server — send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability from Claude, Cursor, VS Code, Windsurf, and any MCP client.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

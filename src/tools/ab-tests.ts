@@ -6,7 +6,16 @@ export const abTestTools: ToolDefinition[] = [
     name: "list_ab_tests",
     category: "ab-testing",
     description:
-      "List A/B tests with per-variant results and whether a winner has been selected yet.",
+      "List A/B tests on the account with each variant's results and whether a winner has " +
+      "been picked yet. " +
+      "\n\n" +
+      "Use it to see which tests are still running and which are waiting on a decision. " +
+      "Reading results here is safe and has no effect on the test — declaring a winner is a " +
+      "separate, irreversible action that sends to the held-back audience. " +
+      "\n\n" +
+      "Reads only. Requires an API key. A test with no winner selected is still open; treat " +
+      "early results with care, since a lead that looks decisive on a small sample often is " +
+      "not. ",
     annotations: {
       title: "List A/B tests",
       readOnlyHint: true,

@@ -132,7 +132,17 @@ export const analyticsTools: ToolDefinition[] = [
     name: "get_monetization_stats",
     category: "analytics",
     description:
-      "Get newsletter monetization stats: paid subscribers, MRR, churn, and sponsorship revenue for the period.",
+      "Get newsletter monetization figures: paid subscribers, monthly recurring revenue, " +
+      "churn, and revenue trend. " +
+      "\n\n" +
+      "Use it for 'how is the paid newsletter doing' questions. These are account-level " +
+      "totals over a trailing window, so they cannot be broken down per campaign — use " +
+      "get_revenue_attribution for that. " +
+      "\n\n" +
+      "Reads only; no billing state is changed and no subscriber is charged. Requires an " +
+      "API key. Revenue figures are reported in minor currency units unless stated " +
+      "otherwise, so check before presenting them as dollars. Zero paid subscribers is a " +
+      "real answer. ",
     annotations: {
       title: "Monetization stats",
       readOnlyHint: true,

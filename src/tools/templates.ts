@@ -6,7 +6,16 @@ export const templateTools: ToolDefinition[] = [
     name: "list_templates",
     category: "templates",
     description:
-      "List saved email templates with their variable placeholders, so you can pick one for a campaign or transactional send.",
+      "List the saved email templates on the account, with the variable placeholders each " +
+      "one expects. " +
+      "\n\n" +
+      "Use it to pick a template before composing a send, and to see which variables you " +
+      "must supply — a template rendered with a missing variable goes out with a visible " +
+      "gap. These are the account's own templates; list_marketplace_items covers " +
+      "third-party ones instead. " +
+      "\n\n" +
+      "Reads only; no template is created, edited, or sent. Requires an API key. An empty " +
+      "list means none have been saved yet, which is not an error. ",
     annotations: {
       title: "List templates",
       readOnlyHint: true,
