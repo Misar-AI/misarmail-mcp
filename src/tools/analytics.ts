@@ -8,6 +8,7 @@ function periodStart(period: unknown): string {
   return new Date(Date.now() - n * 24 * 60 * 60 * 1000).toISOString().split("T")[0]!;
 }
 
+/** Campaign, revenue and engagement analytics. */
 export const analyticsTools: ToolDefinition[] = [
   defineTool({
     name: "get_analytics",

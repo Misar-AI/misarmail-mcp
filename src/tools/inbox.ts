@@ -1,6 +1,7 @@
 import { apiFetchRoot, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
+/** Inbox conversations and their messages. */
 export const inboxTools: ToolDefinition[] = [
   defineTool({
     name: "list_inbox_conversations",

@@ -21,6 +21,7 @@ export interface McpContext {
   source: "mcp_stdio" | "mcp_http";
 }
 
+/** API base used when nothing overrides it. */
 export const DEFAULT_BASE_URL = "https://api.misar.io/mail/v1";
 
 /** Build a context for an HTTP request that has already been authenticated. */

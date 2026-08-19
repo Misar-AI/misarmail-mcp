@@ -1,6 +1,7 @@
 import { apiFetch, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
+/** Contacts, lists and segments. */
 export const contactTools: ToolDefinition[] = [
   defineTool({
     name: "list_contacts",

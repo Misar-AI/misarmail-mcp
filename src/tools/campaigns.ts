@@ -1,6 +1,7 @@
 import { apiFetch, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
+/** Campaign lifecycle: draft, schedule, send and inspect. */
 export const campaignTools: ToolDefinition[] = [
   defineTool({
     name: "list_campaigns",

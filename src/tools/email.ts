@@ -10,6 +10,7 @@ const recipient = {
   },
 } as const;
 
+/** Transactional send, inbox reads and message actions. */
 export const emailTools: ToolDefinition[] = [
   defineTool({
     name: "send_email",

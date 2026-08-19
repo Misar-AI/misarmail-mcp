@@ -1,6 +1,7 @@
 import { apiFetch, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
+/** A/B test creation, listing and winner selection. */
 export const abTestTools: ToolDefinition[] = [
   defineTool({
     name: "list_ab_tests",

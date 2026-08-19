@@ -1,6 +1,7 @@
 import { apiFetch, apiFetchRoot, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
+/** Sending-domain registration and DNS verification. */
 export const domainTools: ToolDefinition[] = [
   defineTool({
     name: "list_domains",

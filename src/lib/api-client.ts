@@ -2,6 +2,7 @@ import type { McpContext } from "./context.js";
 import { apiError } from "./errors.js";
 import { noteUsage } from "./usage.js";
 
+/** Serialise a params object into a query string, dropping undefined values. */
 export function buildQuery(params: Record<string, unknown>): string {
   const entries = Object.entries(params).filter(
     ([, v]) => v !== undefined && v !== null && v !== "",

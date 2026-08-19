@@ -33,6 +33,7 @@ export interface ToolAnnotations {
 /** Scopes an API key must carry for a tool to run. Empty = any valid key. */
 export type ToolScope = "read" | "write" | "send" | "send:transactional" | "contacts";
 
+/** A tool's wire metadata plus the handler that runs it. */
 export interface ToolDefinition {
   name: string;
   description: string;
@@ -45,6 +46,7 @@ export interface ToolDefinition {
   handler: (ctx: McpContext, args: Record<string, unknown>) => Promise<unknown>;
 }
 
+/** Grouping used to organise the catalogue in docs and listings. */
 export type ToolCategory =
   | "email"
   | "campaigns"

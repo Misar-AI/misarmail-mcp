@@ -1,6 +1,7 @@
 import { apiFetch, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
+/** Deliverability auditing, DMARC checks and warm-up status. */
 export const deliverabilityTools: ToolDefinition[] = [
   defineTool({
     name: "get_deliverability_score",

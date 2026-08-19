@@ -1,3 +1,11 @@
+/**
+ * The MisarMail tool catalogue.
+ *
+ * Every tool the server exposes is registered here once and dispatched by name,
+ * so both transports advertise and run exactly the same set.
+ *
+ * @module
+ */
 import type { McpContext } from "./lib/context.js";
 import { takeUsageFooter } from "./lib/usage.js";
 import type { ToolDefinition, ToolScope } from "./lib/types.js";
@@ -84,12 +92,25 @@ export const LEGACY_ALIASES: Record<string, string> = {
   "report.generate": "generate_report",
 };
 
+/** Look up a tool by name, following legacy aliases. */
 export function resolveTool(name: string): ToolDefinition | undefined {
   return BY_NAME.get(name) ?? BY_NAME.get(LEGACY_ALIASES[name] ?? "");
 }
 
 /** The advertised catalogue, in MCP `tools/list` wire shape. */
-export function listTools() {
+export interface ToolSummary {
+  /** Tool id to pass to `tools/call`. */
+  name: string;
+  /** What the tool does, when to use it, and what it changes. */
+  description: string;
+  /** JSON Schema for the tool's arguments. */
+  inputSchema: ToolDefinition["inputSchema"];
+  /** Behavioural hints: readOnly, destructive, idempotent, openWorld. */
+  annotations?: ToolDefinition["annotations"];
+}
+
+/** The advertised catalogue, in MCP `tools/list` wire shape. */
+export function listTools(): ToolSummary[] {
   return ALL_TOOLS.map((t) => ({
     name: t.name,
     description: t.description,
@@ -98,6 +119,7 @@ export function listTools() {
   }));
 }
 
+/** Thrown when `tools/call` names a tool that does not exist. */
 export class UnknownToolError extends Error {
   constructor(name: string) {
     super(`Unknown tool: ${name}`);
@@ -105,6 +127,7 @@ export class UnknownToolError extends Error {
   }
 }
 
+/** Thrown when the caller's key lacks a scope the tool requires. */
 export class MissingScopeError extends Error {
   constructor(readonly required: ToolScope[]) {
     super(`API key requires one of these scopes for this tool: ${required.join(", ")}`);

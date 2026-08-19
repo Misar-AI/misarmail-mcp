@@ -11,4 +11,5 @@
  * Keep SERVER_VERSION in step with package.json.
  */
 export const SERVER_NAME = "misarmail";
-export const SERVER_VERSION = "5.1.1";
+/** Package version reported by `initialize`. Keep in step with package.json. */
+export const SERVER_VERSION = "5.1.2";

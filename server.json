@@ -3,7 +3,7 @@
   "name": "io.github.Misar-AI/misarmail-mcp",
   "title": "MisarMail MCP Server",
   "description": "Send transactional email, run campaigns, manage contacts and automations, audit deliverability.",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "repository": {
     "url": "https://github.com/Misar-AI/misarmail-mcp",
     "source": "github"
@@ -13,7 +13,7 @@
     {
       "registryType": "npm",
       "identifier": "@misarmail/mcp",
-      "version": "5.1.1",
+      "version": "5.1.2",
       "runtimeHint": "npx",
       "transport": {
         "type": "stdio"

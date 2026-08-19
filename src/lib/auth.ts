@@ -45,6 +45,7 @@ export function saveConfig(config: MisarConfig): void {
   writeFileSync(CONFIG_PATH, JSON.stringify(merged, null, 2), { mode: 0o600 });
 }
 
+/** Resolve the API base URL, honouring any self-hosted override. */
 export function getBaseUrl(): string {
   const envUrl = (process.env.MISARMAIL_BASE_URL ?? "").trim();
   if (envUrl) return envUrl.replace(/\/$/, "");
@@ -53,6 +54,7 @@ export function getBaseUrl(): string {
   return DEFAULT_BASE_URL;
 }
 
+/** Read the API key, or null when none is configured. */
 export function tryGetApiKey(): string | null {
   const envKey = process.env.MISARMAIL_API_KEY?.trim();
   if (envKey) return envKey;

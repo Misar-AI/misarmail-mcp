@@ -1,6 +1,7 @@
 import { apiFetch, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
+/** Saved email templates and rendering. */
 export const templateTools: ToolDefinition[] = [
   defineTool({
     name: "list_templates",

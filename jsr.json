@@ -1,0 +1,19 @@
+{
+  "name": "@misarmail/mcp",
+  "version": "5.1.2",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./http": "./src/http.ts",
+    "./registry": "./src/registry.ts"
+  },
+  "publish": {
+    "include": [
+      "src",
+      "README.md",
+      "LICENSE",
+      "jsr.json",
+      "server.json"
+    ]
+  }
+}

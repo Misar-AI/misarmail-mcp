@@ -1,3 +1,13 @@
+/**
+ * Streamable HTTP transport for the MisarMail MCP server.
+ *
+ * Exposes {@link createHttpHandler}, which turns the shared catalogue into a
+ * Web-standard `Request` → `Response` handler. Authentication, plan gating and
+ * rate limiting are injected by the host, so the same catalogue serves both
+ * stdio and HTTP without diverging.
+ *
+ * @module
+ */
 import {
   dispatch,
   listTools,
@@ -25,6 +35,7 @@ import { authGuidance } from "./lib/auth-guidance.js";
  * carries no framework dependency.
  */
 
+/** An authenticated caller, as resolved by the host's `authenticate` hook. */
 export interface AuthenticatedCaller {
   userId: string;
   /**
@@ -37,6 +48,7 @@ export interface AuthenticatedCaller {
   hasAnyScope?: ScopeChecker;
 }
 
+/** Host-supplied hooks and configuration for {@link createHttpHandler}. */
 export interface HttpHandlerOptions {
   /** Resolve an Authorization header to a caller, or null when invalid. */
   authenticate: (authHeader: string | null) => Promise<AuthenticatedCaller | null>;
@@ -86,7 +98,16 @@ function toolResult(data: unknown, isError = false) {
   };
 }
 
-export function createHttpHandler(options: HttpHandlerOptions) {
+/** Handles one HTTP request against the MCP endpoint. */
+export type MailHttpHandler = (request: Request) => Promise<Response>;
+
+/**
+ * Build a Web-standard request handler for the MCP endpoint.
+ *
+ * @param options Authentication, plan gating and the API base URL.
+ * @returns A handler taking a `Request` and resolving to a `Response`.
+ */
+export function createHttpHandler(options: HttpHandlerOptions): MailHttpHandler {
   const {
     authenticate,
     checkPlan,
