@@ -1,0 +1,660 @@
+{
+  "$schema": "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json",
+  "schema_version": 1,
+  "app_info": {
+    "display_name": "MisarMail",
+    "subtitle": "Send and analyse email",
+    "description": "MisarMail lets users send transactional email, build and run multi-step campaigns and automations, manage contacts, segments and templates, A/B test, warm up sending domains and audit deliverability — from ChatGPT.",
+    "category": "BUSINESS"
+  },
+  "tools": {
+    "send_email": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_emails": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_email": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "reply_to_email": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "archive_email": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "validate_email": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_campaigns": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_campaign": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "create_campaign": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "send_campaign": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Deletes, withdraws or irreversibly overwrites data, so it needs confirmation before use."
+      }
+    },
+    "list_contacts": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "create_contact": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "update_contact": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "import_contacts": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_contact_score": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_templates": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "create_template": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "render_template": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_automations": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_automation": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "create_automation": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "toggle_automation": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_ab_tests": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "create_ab_test": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "select_ab_test_winner": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Deletes, withdraws or irreversibly overwrites data, so it needs confirmation before use."
+      }
+    },
+    "get_analytics": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "generate_report": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_revenue_attribution": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_monetization_stats": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_deliverability_score": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "run_deliverability_audit": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_warmup_status": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "check_dmarc": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_domains": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "add_domain": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "verify_domain": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "configure_inbound_domain": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_forms": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_form": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_form_submissions": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "create_landing_page": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_marketplace_items": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_marketplace_item": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_inbox_conversations": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_inbox_conversation_messages": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "categorize_inbox_emails": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_api_keys": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "generate_subject_lines": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_integrations": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "get_integration": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "toggle_integration": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "list_sandbox_sends": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    },
+    "clear_sandbox": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Can create, update, send, schedule or otherwise change MisarMail state.",
+        "open_world_justification": "Operates only on state local to the request.",
+        "destructive_justification": "Deletes, withdraws or irreversibly overwrites data, so it needs confirmation before use."
+      }
+    },
+    "upgrade": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves or computes data to return to the user; it does not change MisarMail records.",
+        "open_world_justification": "Reaches the hosted MisarMail API over the network, so results depend on live account state outside this conversation.",
+        "destructive_justification": "Does not delete, revoke or irreversibly overwrite anything; any change it makes can be undone by a subsequent call."
+      }
+    }
+  }
+}
