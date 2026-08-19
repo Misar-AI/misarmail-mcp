@@ -37,10 +37,8 @@ function toWireTool(t: (typeof ALL_TOOLS)[number]) {
   };
 }
 
-export const SERVER_NAME = "misarmail";
-// Keep in step with package.json — this is what `initialize` reports as
-// serverInfo.version, and directories display it.
-export const SERVER_VERSION = "5.1.0";
+import { SERVER_NAME, SERVER_VERSION } from "./version.js";
+export { SERVER_NAME, SERVER_VERSION };
 
 function buildServer(): Server {
   const server = new Server(

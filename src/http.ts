@@ -10,6 +10,7 @@ import { listResources, readResource } from "./resources.js";
 import { httpContext } from "./lib/context.js";
 import { formatError } from "./lib/errors.js";
 import { SERVER_PROTOCOL_VERSION } from "./protocol.js";
+import { SERVER_NAME, SERVER_VERSION } from "./version.js";
 import { authGuidance } from "./lib/auth-guidance.js";
 
 /**
@@ -90,8 +91,12 @@ export function createHttpHandler(options: HttpHandlerOptions) {
     authenticate,
     checkPlan,
     baseUrl,
-    serverName = "misarmail",
-    serverVersion = "3.0.0",
+    serverName = SERVER_NAME,
+    // Was hardcoded "3.0.0", independently of SERVER_VERSION. The hosted
+    // endpoint takes this default, so `initialize` kept reporting 3.0.0 long
+    // after the package reached 5.x — two version constants, one of them
+    // invisible from the file everyone thinks of as the source of truth.
+    serverVersion = SERVER_VERSION,
     onError,
   } = options;
 
