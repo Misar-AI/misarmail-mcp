@@ -3,7 +3,7 @@
 > Send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability — from any AI assistant.
 
 [![npm](https://img.shields.io/npm/v/@misarmail/mcp)](https://www.npmjs.com/package/@misarmail/mcp)
-[![smithery](https://img.shields.io/badge/smithery-misar%2Fmisarmail--mcp-blue)](https://smithery.ai/server/misar/misarmail-mcp)
+[![smithery](https://img.shields.io/badge/smithery-misar%2Fmisarmail--mcp-blue)](https://smithery.ai/servers/misar/misarmail-mcp)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 **54 tools · 8 prompts · 4 resources · 8 agent skills**
@@ -194,7 +194,8 @@ Every action does.
 - Website — https://www.misarmail.com
 - App — https://mail.misar.io
 - Documentation — https://docs.misar.io/mail/mcp
-- Smithery — https://smithery.ai/server/misar/misarmail-mcp
+- Smithery — https://smithery.ai/servers/misar/misarmail-mcp
+- Smithery skills — [send-transactional-email](https://smithery.ai/skills/misar/send-transactional-email), [run-email-campaign](https://smithery.ai/skills/misar/run-email-campaign), [ab-test-campaign](https://smithery.ai/skills/misar/ab-test-campaign), [build-email-automation](https://smithery.ai/skills/misar/build-email-automation), [clean-contact-list](https://smithery.ai/skills/misar/clean-contact-list), [setup-sending-domain](https://smithery.ai/skills/misar/setup-sending-domain), [audit-deliverability](https://smithery.ai/skills/misar/audit-deliverability), [email-performance-report](https://smithery.ai/skills/misar/email-performance-report)
 - npm — https://www.npmjs.com/package/@misarmail/mcp
 - Source — https://github.com/Misar-AI/misarmail-mcp
 
