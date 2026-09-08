@@ -182,7 +182,6 @@ async function runLogin(args: Record<string, unknown>): Promise<string> {
   });
 }
 
-/** Authentication status and account tools. */
 export const authTools: ToolDefinition[] = [
   defineTool({
     name: "login",

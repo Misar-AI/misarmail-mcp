@@ -1,21 +1,4 @@
 #!/usr/bin/env node
-/**
- * MisarMail MCP server — stdio entrypoint.
- *
- * Running this module starts the server over stdio, which is how Claude
- * Desktop, Claude Code, Cursor and other local MCP clients launch it. For the
- * hosted HTTP transport see `./http`; for the tool catalogue see `./registry`.
- *
- * @example
- * ```jsonc
- * // claude_desktop_config.json
- * { "mcpServers": { "misarmail": {
- *     "command": "npx", "args": ["-y", "@misarmail/mcp"],
- *     "env": { "MISARMAIL_API_KEY": "msk_..." } } } }
- * ```
- *
- * @module
- */
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -54,8 +37,8 @@ function toWireTool(t: (typeof ALL_TOOLS)[number]) {
   };
 }
 
-import { SERVER_NAME, SERVER_VERSION } from "./version.js";
-export { SERVER_NAME, SERVER_VERSION };
+export const SERVER_NAME = "misarmail";
+export const SERVER_VERSION = "3.0.0";
 
 function buildServer(): Server {
   const server = new Server(

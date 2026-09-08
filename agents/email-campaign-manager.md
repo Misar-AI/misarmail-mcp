@@ -3,7 +3,7 @@ name: email-campaign-manager
 description: Plans, drafts, A/B tests and sends campaigns, checking deliverability and warm-up capacity before any send.
 product: MisarMail
 mcp_server: @misarmail/mcp
-tools: 54
+tools: 55
 ---
 
 # email-campaign-manager

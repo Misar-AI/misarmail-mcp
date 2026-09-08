@@ -1,22 +1,12 @@
 import { apiFetch, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
-/** A/B test creation, listing and winner selection. */
 export const abTestTools: ToolDefinition[] = [
   defineTool({
     name: "list_ab_tests",
     category: "ab-testing",
     description:
-      "List A/B tests on the account with each variant's results and whether a winner has " +
-      "been picked yet. " +
-      "\n\n" +
-      "Use it to see which tests are still running and which are waiting on a decision. " +
-      "Reading results here is safe and has no effect on the test — declaring a winner is a " +
-      "separate, irreversible action that sends to the held-back audience. " +
-      "\n\n" +
-      "Reads only. Requires an API key. A test with no winner selected is still open; treat " +
-      "early results with care, since a lead that looks decisive on a small sample often is " +
-      "not. ",
+      "List A/B tests with per-variant results and whether a winner has been selected yet.",
     annotations: {
       title: "List A/B tests",
       readOnlyHint: true,
@@ -29,8 +19,9 @@ export const abTestTools: ToolDefinition[] = [
       properties: {
         type: {
           type: "string",
-          enum: ["subject", "content", "send_time", "from_name"],
-          description: "Filter by what is being tested",
+          enum: ["campaign", "subject"],
+          description:
+            "Filter by test source: 'campaign' for campaign A/B tests (subject/content/send_time/from_name variants on a campaign), 'subject' for standalone subject-line tests",
         },
         page: { type: "number", description: "Page number (default 1)" },
         limit: { type: "number", description: "Results per page (default 20)" },
@@ -49,7 +40,7 @@ export const abTestTools: ToolDefinition[] = [
     name: "create_ab_test",
     category: "ab-testing",
     description:
-      "Create an A/B test on a campaign with two or more variants. A sample percentage is sent first; the winner goes to the remainder once selected.",
+      "Create one A/B test variant on a campaign. The real API stores a single variant per call, so build a test by calling this once per variant (e.g. twice for a plain A/B split) using the same campaign_id and distinct `variant` labels. Each variant gets send_percent of the audience; auto_select_winner (with winner_wait_hours) can pick and send the winner automatically, or use select_ab_test_winner to do it manually.",
     scopes: ["write"],
     annotations: {
       title: "Create A/B test",
@@ -60,41 +51,53 @@ export const abTestTools: ToolDefinition[] = [
     },
     inputSchema: {
       type: "object",
-      required: ["campaign_id", "type", "variants"],
+      required: ["campaign_id", "variant"],
       properties: {
-        campaign_id: { type: "string", description: "Campaign to test" },
-        type: {
+        campaign_id: { type: "string", description: "Campaign to test (UUID)" },
+        variant: { type: "string", description: "Variant label, e.g. 'A' or 'B' (max 5 chars)" },
+        test_type: {
           type: "string",
-          enum: ["subject", "content", "send_time", "from_name"],
-          description: "What to test",
+          enum: ["content", "subject", "send_time", "from_name", "preheader"],
+          description: "What this variant differs on (default: content)",
         },
-        variants: {
-          type: "array",
-          description: "Test variants (2–5)",
-          items: {
-            type: "object",
-            properties: {
-              label: { type: "string", description: "Variant label, e.g. A / B" },
-              subject: { type: "string", description: "Subject line for subject tests" },
-              html: { type: "string", description: "Body content for content tests" },
-              from_name: { type: "string", description: "Sender name for from_name tests" },
-              send_at: { type: "string", description: "ISO timestamp for send_time tests" },
-            },
-          },
-        },
-        sample_percentage: {
+        subject: { type: "string", description: "Subject line for subject tests" },
+        preheader: { type: "string", description: "Preheader text for preheader tests" },
+        body_html: { type: "string", description: "Body HTML for content tests" },
+        from_name: { type: "string", description: "Sender name for from_name tests" },
+        send_percent: {
           type: "number",
-          description: "Percent of the audience used for the test (default 20)",
+          description: "Percent of the audience that receives this variant (1-99, default 50)",
         },
-        winner_metric: {
-          type: "string",
-          enum: ["open_rate", "click_rate", "conversion_rate"],
-          description: "Metric used to pick the winner (default open_rate)",
+        send_time_a: { type: "string", description: "ISO timestamp for this variant's send_time slot A" },
+        send_time_b: { type: "string", description: "ISO timestamp for this variant's send_time slot B" },
+        auto_select_winner: {
+          type: "boolean",
+          description: "Automatically select and send the winner after winner_wait_hours (default false)",
+        },
+        winner_wait_hours: {
+          type: "number",
+          description: "Hours to wait before auto-selecting a winner (1-168, default 4)",
         },
       },
     },
     handler: (ctx, args) =>
-      apiFetch(ctx, "/ab-tests", { method: "POST", body: JSON.stringify(args) }),
+      apiFetch(ctx, "/ab-tests", {
+        method: "POST",
+        body: JSON.stringify({
+          campaign_id: args.campaign_id,
+          variant: args.variant,
+          test_type: args.test_type,
+          subject: args.subject,
+          preheader: args.preheader,
+          body_html: args.body_html,
+          from_name: args.from_name,
+          send_percent: args.send_percent,
+          send_time_a: args.send_time_a,
+          send_time_b: args.send_time_b,
+          auto_select_winner: args.auto_select_winner,
+          winner_wait_hours: args.winner_wait_hours,
+        }),
+      }),
   }),
 
   defineTool({
@@ -118,8 +121,8 @@ export const abTestTools: ToolDefinition[] = [
         winner_variant: { type: "string", description: "Label of the winning variant, e.g. B" },
         metric: {
           type: "string",
-          enum: ["open_rate", "click_rate", "conversion_rate"],
-          description: "Metric the decision was based on (default open_rate)",
+          enum: ["opens", "clicks", "revenue", "conversions"],
+          description: "Metric the decision was based on (default opens)",
         },
       },
     },

@@ -73,7 +73,6 @@ function renderUsage(data: PlanResponse): string {
   return out.join("\n");
 }
 
-/** Plan, quota and upgrade tools. */
 export const upgradeTools: ToolDefinition[] = [
   defineTool({
     name: "upgrade",

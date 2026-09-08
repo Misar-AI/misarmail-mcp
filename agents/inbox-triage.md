@@ -3,7 +3,7 @@ name: inbox-triage
 description: Triages the unified inbox: categorises intent, drafts replies, escalates what needs a human.
 product: MisarMail
 mcp_server: @misarmail/mcp
-tools: 54
+tools: 55
 ---
 
 # inbox-triage

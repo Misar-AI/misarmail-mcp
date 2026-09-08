@@ -1,7 +1,6 @@
 import { apiFetch, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
-/** Contacts, lists and segments. */
 export const contactTools: ToolDefinition[] = [
   defineTool({
     name: "list_contacts",
@@ -62,23 +61,30 @@ export const contactTools: ToolDefinition[] = [
         email: { type: "string", description: "Contact email address" },
         first_name: { type: "string", description: "First name (max 100 chars)" },
         last_name: { type: "string", description: "Last name (max 100 chars)" },
-        phone: { type: "string", description: "Phone number (max 50 chars)" },
-        company: { type: "string", description: "Company name (max 150 chars)" },
-        job_title: { type: "string", description: "Job title (max 100 chars)" },
         tags: { type: "array", items: { type: "string" }, description: "Segmentation tags" },
         source: { type: "string", description: "Where this contact came from (max 100 chars)" },
         custom_fields: { type: "object", description: "Custom key-value attributes" },
       },
     },
     handler: (ctx, args) =>
-      apiFetch(ctx, "/contacts", { method: "POST", body: JSON.stringify(args) }),
+      apiFetch(ctx, "/contacts", {
+        method: "POST",
+        body: JSON.stringify({
+          email: args.email,
+          firstName: args.first_name,
+          lastName: args.last_name,
+          tags: args.tags,
+          source: args.source,
+          customFields: args.custom_fields,
+        }),
+      }),
   }),
 
   defineTool({
     name: "update_contact",
     category: "contacts",
     description:
-      "Update an existing contact by email address, including changing subscription status. Setting status to unsubscribed immediately excludes them from every future campaign.",
+      "Update an existing contact by email address, including changing subscription status. Setting status to unsubscribed immediately excludes them from every future campaign. Does not support tags, phone, company, or job title — the API has no fields for them.",
     scopes: ["contacts", "write"],
     annotations: {
       title: "Update contact",
@@ -94,22 +100,24 @@ export const contactTools: ToolDefinition[] = [
         email: { type: "string", description: "Email address identifying the contact" },
         first_name: { type: "string", description: "First name" },
         last_name: { type: "string", description: "Last name" },
-        phone: { type: "string", description: "Phone number" },
-        company: { type: "string", description: "Company name" },
-        job_title: { type: "string", description: "Job title" },
         status: {
           type: "string",
           enum: ["subscribed", "unsubscribed", "bounced", "complained"],
           description: "New subscription status",
         },
-        tags: { type: "array", items: { type: "string" }, description: "Replace segmentation tags" },
         custom_fields: { type: "object", description: "Custom key-value attributes to merge" },
       },
     },
     handler: (ctx, args) =>
       apiFetch(ctx, "/contacts", {
         method: "PATCH",
-        body: JSON.stringify({ ...args, email: String(args.email).toLowerCase() }),
+        body: JSON.stringify({
+          email: String(args.email).toLowerCase(),
+          firstName: args.first_name,
+          lastName: args.last_name,
+          status: args.status,
+          customFields: args.custom_fields,
+        }),
       }),
   }),
 
@@ -117,7 +125,7 @@ export const contactTools: ToolDefinition[] = [
     name: "import_contacts",
     category: "contacts",
     description:
-      "Bulk-import up to 5,000 contacts in one call. Existing addresses are updated rather than duplicated. Returns per-row results so you can see which rows were rejected and why.",
+      "Bulk-import up to 5,000 contacts in one call. By default, addresses that already exist are skipped rather than duplicated — pass update_existing: true to update them instead. Returns per-row results so you can see which rows were rejected and why.",
     scopes: ["contacts", "write"],
     annotations: {
       title: "Import contacts",
@@ -140,19 +148,31 @@ export const contactTools: ToolDefinition[] = [
               email: { type: "string" },
               first_name: { type: "string" },
               last_name: { type: "string" },
-              company: { type: "string" },
               tags: { type: "array", items: { type: "string" } },
             },
           },
         },
         update_existing: {
           type: "boolean",
-          description: "Update contacts that already exist (default true)",
+          description: "Update contacts that already exist instead of skipping them (default false)",
         },
       },
     },
-    handler: (ctx, args) =>
-      apiFetch(ctx, "/contacts/import", { method: "POST", body: JSON.stringify(args) }),
+    handler: (ctx, args) => {
+      const rows = Array.isArray(args.contacts) ? (args.contacts as Record<string, unknown>[]) : [];
+      return apiFetch(ctx, "/contacts/import", {
+        method: "POST",
+        body: JSON.stringify({
+          contacts: rows.map((row) => ({
+            email: row.email,
+            firstName: row.first_name,
+            lastName: row.last_name,
+            tags: row.tags,
+          })),
+          updateExisting: args.update_existing,
+        }),
+      });
+    },
   }),
 
   defineTool({

@@ -1,7 +1,6 @@
 import { apiFetch, apiFetchRoot, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
-/** Sending-domain registration and DNS verification. */
 export const domainTools: ToolDefinition[] = [
   defineTool({
     name: "list_domains",
@@ -92,25 +91,17 @@ export const domainTools: ToolDefinition[] = [
     },
     inputSchema: {
       type: "object",
-      required: ["domain", "subdomain"],
+      required: ["domain", "subdomain", "webhook_url"],
       properties: {
         domain: { type: "string", description: "Root domain, e.g. example.com" },
         subdomain: { type: "string", description: "Inbound subdomain label, e.g. reply" },
         webhook_url: {
           type: "string",
-          description: "Optional HTTPS URL to POST inbound messages to",
+          description: "HTTPS URL to POST inbound messages to (required)",
         },
       },
     },
-    handler: async (ctx, args) => {
-      const result = await apiFetch(ctx, "/inbound", {
-        method: "POST",
-        body: JSON.stringify(args),
-      });
-      return {
-        ...(result as Record<string, unknown>),
-        mx_record: `${String(args.subdomain)}.${String(args.domain)}`,
-      };
-    },
+    handler: (ctx, args) =>
+      apiFetch(ctx, "/inbound", { method: "POST", body: JSON.stringify(args) }),
   }),
 ];

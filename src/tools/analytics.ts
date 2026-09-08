@@ -8,7 +8,6 @@ function periodStart(period: unknown): string {
   return new Date(Date.now() - n * 24 * 60 * 60 * 1000).toISOString().split("T")[0]!;
 }
 
-/** Campaign, revenue and engagement analytics. */
 export const analyticsTools: ToolDefinition[] = [
   defineTool({
     name: "get_analytics",
@@ -46,6 +45,48 @@ export const analyticsTools: ToolDefinition[] = [
           ctx,
           `/analytics${buildQuery({
             campaignId: args.campaign_id,
+            startDate: args.start_date ?? periodStart(args.period),
+            endDate: args.end_date,
+            groupBy: args.group_by ?? "day",
+          })}`,
+        ),
+      ),
+  }),
+
+  defineTool({
+    name: "get_analytics_timeline",
+    category: "analytics",
+    description:
+      "Get a day/week/month breakdown of sent, delivered, opened, clicked, bounced, complained, replied, and unsubscribed — across every send medium (campaigns, inbox compose, API, MCP, SDKs, GraphQL, automations). The timeline counterpart to get_analytics's period totals.",
+    annotations: {
+      title: "Get analytics timeline",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
+    inputSchema: {
+      type: "object",
+      properties: {
+        start_date: { type: "string", description: "Start date, ISO 8601 (e.g. 2026-01-01)" },
+        end_date: { type: "string", description: "End date, ISO 8601" },
+        period: {
+          type: "string",
+          enum: ["today", "7d", "30d", "90d"],
+          description: "Shorthand window used when start_date is omitted (default 30d)",
+        },
+        group_by: {
+          type: "string",
+          enum: ["day", "week", "month"],
+          description: "Time bucket for each row (default day)",
+        },
+      },
+    },
+    handler: async (ctx, args) =>
+      unwrap(
+        await apiFetch(
+          ctx,
+          `/analytics/timeline${buildQuery({
             startDate: args.start_date ?? periodStart(args.period),
             endDate: args.end_date,
             groupBy: args.group_by ?? "day",
@@ -133,17 +174,7 @@ export const analyticsTools: ToolDefinition[] = [
     name: "get_monetization_stats",
     category: "analytics",
     description:
-      "Get newsletter monetization figures: paid subscribers, monthly recurring revenue, " +
-      "churn, and revenue trend. " +
-      "\n\n" +
-      "Use it for 'how is the paid newsletter doing' questions. These are account-level " +
-      "totals over a trailing window, so they cannot be broken down per campaign — use " +
-      "get_revenue_attribution for that. " +
-      "\n\n" +
-      "Reads only; no billing state is changed and no subscriber is charged. Requires an " +
-      "API key. Revenue figures are reported in minor currency units unless stated " +
-      "otherwise, so check before presenting them as dollars. Zero paid subscribers is a " +
-      "real answer. ",
+      "Get newsletter monetization stats: paid subscribers, MRR, churn, and sponsorship revenue for the period.",
     annotations: {
       title: "Monetization stats",
       readOnlyHint: true,

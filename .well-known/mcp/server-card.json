@@ -69,11 +69,11 @@
     },
     {
       "name": "update_contact",
-      "description": "Update an existing contact by email address, including changing subscription status. Setting status to unsubscribed immediately excludes them from every future campaign."
+      "description": "Update an existing contact by email address, including changing subscription status. Setting status to unsubscribed immediately excludes them from every future campaign. Does not support tags, phone, company, or job title — the API has no fields for them."
     },
     {
       "name": "import_contacts",
-      "description": "Bulk-import up to 5,000 contacts in one call. Existing addresses are updated rather than duplicated. Returns per-row results so you can see which rows were rejected and why."
+      "description": "Bulk-import up to 5,000 contacts in one call. By default, addresses that already exist are skipped rather than duplicated — pass update_existing: true to update them instead. Returns per-row results so you can see which rows were rejected and why."
     },
     {
       "name": "get_contact_score",
@@ -101,7 +101,7 @@
     },
     {
       "name": "create_automation",
-      "description": "Create an automation workflow from a trigger and an ordered list of steps. Created paused by default — call toggle_automation to activate once the steps are reviewed."
+      "description": "Create an automation workflow from a trigger, saved as a paused draft. The API's create endpoint only accepts a name and trigger — it has no fields for workflow steps or starting active; configure the step sequence in the MisarMail dashboard's visual builder, and use toggle_automation to activate once reviewed."
     },
     {
       "name": "toggle_automation",
@@ -113,7 +113,7 @@
     },
     {
       "name": "create_ab_test",
-      "description": "Create an A/B test on a campaign with two or more variants. A sample percentage is sent first; the winner goes to the remainder once selected."
+      "description": "Create one A/B test variant on a campaign. The real API stores a single variant per call, so build a test by calling this once per variant (e.g. twice for a plain A/B split) using the same campaign_id and distinct `variant` labels. Each variant gets send_percent of the audience; auto_select_winner (with winner_wait_hours) can pick and send the winner automatically, or use select_ab_test_winner to do it manually."
     },
     {
       "name": "select_ab_test_winner",
@@ -122,6 +122,10 @@
     {
       "name": "get_analytics",
       "description": "Get delivery and engagement analytics — sent, delivered, opened, clicked, bounced, and complained — for the account or one campaign, grouped by day/week/month."
+    },
+    {
+      "name": "get_analytics_timeline",
+      "description": "Get a day/week/month breakdown of sent, delivered, opened, clicked, bounced, complained, replied, and unsubscribed — across every send medium (campaigns, inbox compose, API, MCP, SDKs, GraphQL, automations). The timeline counterpart to get_analytics's period totals."
     },
     {
       "name": "generate_report",
@@ -181,7 +185,7 @@
     },
     {
       "name": "create_landing_page",
-      "description": "Create a hosted landing page with an email capture form. Returns the public URL; subscribers flow straight into your contact list."
+      "description": "Create a hosted landing page with a single hero block (headline, subheadline, CTA). Returns the public URL. The real API stores pages as a page-builder block array with no dedicated headline/CTA fields, so this tool translates your inputs into one 'hero' block — for multi-block pages or a real CTA link, use the landing page editor in the MisarMail dashboard."
     },
     {
       "name": "list_marketplace_items",

@@ -2,7 +2,7 @@
 
 Send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability — from any AI assistant.
 
-54 tools · 8 prompts ·
+55 tools · 8 prompts ·
 4 resources · 3 agents
 
 **Authentication is required for every tool.** Either run the `login` tool

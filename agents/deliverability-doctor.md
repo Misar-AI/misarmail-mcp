@@ -3,7 +3,7 @@ name: deliverability-doctor
 description: Diagnoses inbox placement: score, SPF/DKIM/DMARC, warm-up ceiling, list hygiene — returns a prioritized fix list.
 product: MisarMail
 mcp_server: @misarmail/mcp
-tools: 54
+tools: 55
 ---
 
 # deliverability-doctor

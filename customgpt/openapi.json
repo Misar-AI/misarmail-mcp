@@ -386,7 +386,7 @@
     "/mcp/tools/update_contact": {
       "post": {
         "operationId": "update_contact",
-        "summary": "Update an existing contact by email address, including changing subscription status. Setting status to unsubscribed immediately excludes them from every future campaign.",
+        "summary": "Update an existing contact by email address, including changing subscription status. Setting status to unsubscribed immediately excludes them from every future campaign. Does not support tags, phone, company, or job title — the API has no fields for them.",
         "requestBody": {
           "required": false,
           "content": {
@@ -417,7 +417,7 @@
     "/mcp/tools/import_contacts": {
       "post": {
         "operationId": "import_contacts",
-        "summary": "Bulk-import up to 5,000 contacts in one call. Existing addresses are updated rather than duplicated. Returns per-row results so you can see which rows were rejected and why.",
+        "summary": "Bulk-import up to 5,000 contacts in one call. By default, addresses that already exist are skipped rather than duplicated — pass update_existing: true to update them instead. Returns per-row results so you can see which rows were rejected and why.",
         "requestBody": {
           "required": false,
           "content": {
@@ -634,7 +634,7 @@
     "/mcp/tools/create_automation": {
       "post": {
         "operationId": "create_automation",
-        "summary": "Create an automation workflow from a trigger and an ordered list of steps. Created paused by default — call toggle_automation to activate once the steps are reviewed.",
+        "summary": "Create an automation workflow from a trigger, saved as a paused draft. The API's create endpoint only accepts a name and trigger — it has no fields for workflow steps or starting active; configure the step sequence in the MisarMail dashboard's visual builder, and use toggle_automation to activate on",
         "requestBody": {
           "required": false,
           "content": {
@@ -727,7 +727,7 @@
     "/mcp/tools/create_ab_test": {
       "post": {
         "operationId": "create_ab_test",
-        "summary": "Create an A/B test on a campaign with two or more variants. A sample percentage is sent first; the winner goes to the remainder once selected.",
+        "summary": "Create one A/B test variant on a campaign. The real API stores a single variant per call, so build a test by calling this once per variant (e.g. twice for a plain A/B split) using the same campaign_id and distinct `variant` labels. Each variant gets send_percent of the audience; auto_select_winner (",
         "requestBody": {
           "required": false,
           "content": {
@@ -790,6 +790,37 @@
       "post": {
         "operationId": "get_analytics",
         "summary": "Get delivery and engagement analytics — sent, delivered, opened, clicked, bounced, and complained — for the account or one campaign, grouped by day/week/month.",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tool result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key"
+          }
+        }
+      }
+    },
+    "/mcp/tools/get_analytics_timeline": {
+      "post": {
+        "operationId": "get_analytics_timeline",
+        "summary": "Get a day/week/month breakdown of sent, delivered, opened, clicked, bounced, complained, replied, and unsubscribed — across every send medium (campaigns, inbox compose, API, MCP, SDKs, GraphQL, automations). The timeline counterpart to get_analytics's period totals.",
         "requestBody": {
           "required": false,
           "content": {
@@ -883,37 +914,6 @@
       "post": {
         "operationId": "get_monetization_stats",
         "summary": "Get newsletter monetization stats: paid subscribers, MRR, churn, and sponsorship revenue for the period.",
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Tool result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid API key"
-          }
-        }
-      }
-    },
-    "/mcp/tools/get_deliverability_score": {
-      "post": {
-        "operationId": "get_deliverability_score",
-        "summary": "Get the account deliverability score (0–100) and letter grade (A–F) with the factors dragging it down. Start here when asked why emails are landing in spam.",
         "requestBody": {
           "required": false,
           "content": {

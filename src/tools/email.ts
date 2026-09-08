@@ -10,7 +10,6 @@ const recipient = {
   },
 } as const;
 
-/** Transactional send, inbox reads and message actions. */
 export const emailTools: ToolDefinition[] = [
   defineTool({
     name: "send_email",
@@ -186,16 +185,7 @@ export const emailTools: ToolDefinition[] = [
   defineTool({
     name: "archive_email",
     category: "email",
-    description:
-      "Move one email out of the inbox and into the archive. " +
-      "\n\n" +
-      "Use it to clear handled mail from the working inbox. This is REVERSIBLE and " +
-      "non-destructive: the message is not deleted, its content is unchanged, and it can be " +
-      "found again through the archive. It does not mark the message read, reply to it, or " +
-      "notify the sender. " +
-      "\n\n" +
-      "Safe to repeat — archiving an already-archived email changes nothing. Requires an " +
-      "API key. Affects exactly one message per call. ",
+    description: "Move an email to the archive folder. Reversible — the message is not deleted.",
     scopes: ["write"],
     annotations: {
       title: "Archive email",

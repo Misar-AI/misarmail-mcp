@@ -1,7 +1,6 @@
 import { apiFetch, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
-/** Campaign lifecycle: draft, schedule, send and inspect. */
 export const campaignTools: ToolDefinition[] = [
   defineTool({
     name: "list_campaigns",
@@ -72,18 +71,17 @@ export const campaignTools: ToolDefinition[] = [
     },
     inputSchema: {
       type: "object",
-      required: ["name", "subject", "from_email"],
+      required: ["name", "subject", "from_email", "from_name"],
       properties: {
         name: { type: "string", description: "Internal campaign name (not shown to recipients)" },
         subject: { type: "string", description: "Subject line recipients will see" },
         from_email: { type: "string", description: "Verified sender address" },
-        from_name: { type: "string", description: "Sender display name" },
+        from_name: { type: "string", description: "Sender display name (required)" },
         reply_to: { type: "string", description: "Reply-to address" },
         html: { type: "string", description: "HTML body content" },
         text: { type: "string", description: "Plain text body content" },
         template_id: { type: "string", description: "Use a saved template instead of inline HTML" },
         segment_id: { type: "string", description: "Audience segment to send to" },
-        tags: { type: "array", items: { type: "string" }, description: "Contact tags to target" },
         scheduled_at: {
           type: "string",
           description: "ISO 8601 timestamp to schedule the send (omit to keep as draft)",
@@ -91,7 +89,21 @@ export const campaignTools: ToolDefinition[] = [
       },
     },
     handler: (ctx, args) =>
-      apiFetch(ctx, "/campaigns", { method: "POST", body: JSON.stringify(args) }),
+      apiFetch(ctx, "/campaigns", {
+        method: "POST",
+        body: JSON.stringify({
+          name: args.name,
+          subject: args.subject,
+          fromEmail: args.from_email,
+          fromName: args.from_name,
+          replyTo: args.reply_to,
+          bodyHtml: args.html,
+          bodyText: args.text,
+          templateId: args.template_id,
+          segmentId: args.segment_id,
+          scheduledAt: args.scheduled_at,
+        }),
+      }),
   }),
 
   defineTool({
@@ -123,7 +135,7 @@ export const campaignTools: ToolDefinition[] = [
       if (args.scheduled_at) {
         return apiFetch(ctx, `/campaigns/${id}`, {
           method: "PATCH",
-          body: JSON.stringify({ status: "scheduled", scheduled_at: args.scheduled_at }),
+          body: JSON.stringify({ status: "scheduled", scheduledAt: args.scheduled_at }),
         });
       }
       return apiFetch(ctx, `/campaigns/${id}/send`, { method: "POST" });

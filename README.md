@@ -3,10 +3,10 @@
 > Send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability — from any AI assistant.
 
 [![npm](https://img.shields.io/npm/v/@misarmail/mcp)](https://www.npmjs.com/package/@misarmail/mcp)
-[![smithery](https://img.shields.io/badge/smithery-misar%2Fmisarmail--mcp-blue)](https://smithery.ai/servers/misar/misarmail-mcp)
+[![smithery](https://img.shields.io/badge/smithery-misar%2Fmisarmail--mcp-blue)](https://smithery.ai/server/misar/misarmail-mcp)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
-**54 tools · 8 prompts · 4 resources · 8 agent skills**
+**55 tools · 8 prompts · 4 resources · 8 agent skills**
 
 Works with Claude (Desktop, Code, and web), Cursor, VS Code, Windsurf, Cline,
 Zed, Gemini CLI, ChatGPT, and any other MCP-compatible client — over stdio or
@@ -98,12 +98,13 @@ Self-hosted instances: set `MISARMAIL_BASE_URL`.
 | `render_template` | Render a template with sample variables and return the resulting HTML and subject. |
 | `list_automations` | List automation workflows (welcome series, re-engagement, drip sequences) with their trigger type and active state.. |
 | `get_automation` | Get one automation workflow in full: trigger, every step with its delay, and per-step completion stats.. |
-| `create_automation` | Create an automation workflow from a trigger and an ordered list of steps. |
+| `create_automation` | Create an automation workflow from a trigger, saved as a paused draft. |
 | `toggle_automation` | Activate or pause an automation. |
 | `list_ab_tests` | List A/B tests with per-variant results and whether a winner has been selected yet.. |
-| `create_ab_test` | Create an A/B test on a campaign with two or more variants. |
+| `create_ab_test` | Create one A/B test variant on a campaign. |
 | `select_ab_test_winner` | Select the winning variant and send it to the remaining audience. |
 | `get_analytics` | Get delivery and engagement analytics — sent, delivered, opened, clicked, bounced, and complained — for the account or one campaign, grouped by day/week/month.. |
+| `get_analytics_timeline` | Get a day/week/month breakdown of sent, delivered, opened, clicked, bounced, complained, replied, and unsubscribed — across every send medium (campaigns, inbox compose, API, MCP, SDKs, GraphQL, automations). |
 | `generate_report` | Generate a structured analytics report over a date range. |
 | `get_revenue_attribution` | Attribute ecommerce revenue to email — revenue per campaign, per contact, and average order value from tracked conversions.. |
 | `get_monetization_stats` | Get newsletter monetization stats: paid subscribers, MRR, churn, and sponsorship revenue for the period.. |
@@ -118,7 +119,7 @@ Self-hosted instances: set `MISARMAIL_BASE_URL`.
 | `list_forms` | List signup forms with their embed status and conversion counts.. |
 | `get_form` | Get one signup form including its fields, embed code, and redirect behaviour.. |
 | `get_form_submissions` | List submissions for a signup form, including the submitted field values and timestamps.. |
-| `create_landing_page` | Create a hosted landing page with an email capture form. |
+| `create_landing_page` | Create a hosted landing page with a single hero block (headline, subheadline, CTA). |
 | `list_marketplace_items` | Browse the MisarMail template marketplace for ready-made email and automation templates.. |
 | `get_marketplace_item` | Get one marketplace listing with its full preview, author, and install count.. |
 | `list_inbox_conversations` | List unified-inbox conversations (threads) with their status and detected intent. |
@@ -194,8 +195,7 @@ Every action does.
 - Website — https://www.misarmail.com
 - App — https://mail.misar.io
 - Documentation — https://docs.misar.io/mail/mcp
-- Smithery — https://smithery.ai/servers/misar/misarmail-mcp
-- Smithery skills — [send-transactional-email](https://smithery.ai/skills/misar/send-transactional-email), [run-email-campaign](https://smithery.ai/skills/misar/run-email-campaign), [ab-test-campaign](https://smithery.ai/skills/misar/ab-test-campaign), [build-email-automation](https://smithery.ai/skills/misar/build-email-automation), [clean-contact-list](https://smithery.ai/skills/misar/clean-contact-list), [setup-sending-domain](https://smithery.ai/skills/misar/setup-sending-domain), [audit-deliverability](https://smithery.ai/skills/misar/audit-deliverability), [email-performance-report](https://smithery.ai/skills/misar/email-performance-report)
+- Smithery — https://smithery.ai/server/misar/misarmail-mcp
 - npm — https://www.npmjs.com/package/@misarmail/mcp
 - Source — https://github.com/Misar-AI/misarmail-mcp
 

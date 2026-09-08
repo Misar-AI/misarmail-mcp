@@ -1,13 +1,3 @@
-/**
- * Streamable HTTP transport for the MisarMail MCP server.
- *
- * Exposes {@link createHttpHandler}, which turns the shared catalogue into a
- * Web-standard `Request` → `Response` handler. Authentication, plan gating and
- * rate limiting are injected by the host, so the same catalogue serves both
- * stdio and HTTP without diverging.
- *
- * @module
- */
 import {
   dispatch,
   listTools,
@@ -20,7 +10,6 @@ import { listResources, readResource } from "./resources.js";
 import { httpContext } from "./lib/context.js";
 import { formatError } from "./lib/errors.js";
 import { SERVER_PROTOCOL_VERSION } from "./protocol.js";
-import { SERVER_NAME, SERVER_VERSION } from "./version.js";
 import { authGuidance } from "./lib/auth-guidance.js";
 
 /**
@@ -35,7 +24,6 @@ import { authGuidance } from "./lib/auth-guidance.js";
  * carries no framework dependency.
  */
 
-/** An authenticated caller, as resolved by the host's `authenticate` hook. */
 export interface AuthenticatedCaller {
   userId: string;
   /**
@@ -48,7 +36,6 @@ export interface AuthenticatedCaller {
   hasAnyScope?: ScopeChecker;
 }
 
-/** Host-supplied hooks and configuration for {@link createHttpHandler}. */
 export interface HttpHandlerOptions {
   /** Resolve an Authorization header to a caller, or null when invalid. */
   authenticate: (authHeader: string | null) => Promise<AuthenticatedCaller | null>;
@@ -98,26 +85,13 @@ function toolResult(data: unknown, isError = false) {
   };
 }
 
-/** Handles one HTTP request against the MCP endpoint. */
-export type MailHttpHandler = (request: Request) => Promise<Response>;
-
-/**
- * Build a Web-standard request handler for the MCP endpoint.
- *
- * @param options Authentication, plan gating and the API base URL.
- * @returns A handler taking a `Request` and resolving to a `Response`.
- */
-export function createHttpHandler(options: HttpHandlerOptions): MailHttpHandler {
+export function createHttpHandler(options: HttpHandlerOptions) {
   const {
     authenticate,
     checkPlan,
     baseUrl,
-    serverName = SERVER_NAME,
-    // Was hardcoded "3.0.0", independently of SERVER_VERSION. The hosted
-    // endpoint takes this default, so `initialize` kept reporting 3.0.0 long
-    // after the package reached 5.x — two version constants, one of them
-    // invisible from the file everyone thinks of as the source of truth.
-    serverVersion = SERVER_VERSION,
+    serverName = "misarmail",
+    serverVersion = "3.0.0",
     onError,
   } = options;
 

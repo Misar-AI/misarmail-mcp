@@ -1,7 +1,6 @@
 import { apiFetchRoot, buildQuery, unwrap } from "../lib/api-client.js";
 import { defineTool, type ToolDefinition } from "../lib/types.js";
 
-/** Inbox conversations and their messages. */
 export const inboxTools: ToolDefinition[] = [
   defineTool({
     name: "list_inbox_conversations",
@@ -52,17 +51,7 @@ export const inboxTools: ToolDefinition[] = [
   defineTool({
     name: "get_inbox_conversation_messages",
     category: "email",
-    description:
-      "Get every message in one inbox conversation, oldest first, with sender and " +
-      "timestamp. " +
-      "\n\n" +
-      "Use it to read a thread in full before replying or summarising — it is the detail " +
-      "view behind a conversation listing. It covers one conversation, and it does not " +
-      "send, reply, or mark anything as read. " +
-      "\n\n" +
-      "Reads only. Requires an API key. Message bodies are real customer correspondence, so " +
-      "treat the contents as confidential. Returns the whole thread rather than a page, so " +
-      "long conversations return a lot of text. ",
+    description: "Get every message in one inbox conversation, oldest first, with sender and timestamps.",
     annotations: {
       title: "Conversation messages",
       readOnlyHint: true,

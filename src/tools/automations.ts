@@ -13,16 +13,7 @@ export const automationTools: ToolDefinition[] = [
     name: "list_automations",
     category: "automations",
     description:
-      "List automation workflows on the account — welcome series, re-engagement, drip " +
-      "sequences — with their status and enrolment counts. " +
-      "\n\n" +
-      "Use it to see what is running before adding another workflow that might overlap, and " +
-      "to find an automation id for get_automation or toggle_automation. Listing does not " +
-      "reveal the individual steps; get_automation does that. " +
-      "\n\n" +
-      "Reads only; nothing is activated, paused, or enrolled. Requires an API key. An " +
-      "automation may exist while inactive, so read the status rather than assuming a " +
-      "listed workflow is sending. ",
+      "List automation workflows (welcome series, re-engagement, drip sequences) with their trigger type and active state.",
     annotations: {
       title: "List automations",
       readOnlyHint: true,
@@ -55,17 +46,7 @@ export const automationTools: ToolDefinition[] = [
     name: "get_automation",
     category: "automations",
     description:
-      "Get one automation workflow in full: its trigger, every step with its settings, and " +
-      "current enrolment counts. " +
-      "\n\n" +
-      "Use it to understand exactly what an automation will do to contacts before " +
-      "activating it — the step list is where sends, waits and branches become visible. For " +
-      "the list of automations, use list_automations; to start or pause one, " +
-      "toggle_automation. " +
-      "\n\n" +
-      "Reads only; reading a workflow does not enrol anyone or trigger a step. Requires an " +
-      "API key. An automation can be defined but inactive, so check its state rather than " +
-      "assuming it is running. ",
+      "Get one automation workflow in full: trigger, every step with its delay, and per-step completion stats.",
     annotations: {
       title: "Get automation",
       readOnlyHint: true,
@@ -88,7 +69,7 @@ export const automationTools: ToolDefinition[] = [
     name: "create_automation",
     category: "automations",
     description:
-      "Create an automation workflow from a trigger and an ordered list of steps. Created paused by default — call toggle_automation to activate once the steps are reviewed.",
+      "Create an automation workflow from a trigger, saved as a paused draft. The API's create endpoint only accepts a name and trigger — it has no fields for workflow steps or starting active; configure the step sequence in the MisarMail dashboard's visual builder, and use toggle_automation to activate once reviewed.",
     scopes: ["write"],
     annotations: {
       title: "Create automation",
@@ -111,45 +92,24 @@ export const automationTools: ToolDefinition[] = [
           type: "object",
           description: "Trigger parameters, e.g. { \"tag\": \"trial\" } for tag_added",
         },
-        steps: {
-          type: "array",
-          description: "Ordered workflow steps",
-          items: {
-            type: "object",
-            required: ["type"],
-            properties: {
-              type: {
-                type: "string",
-                enum: ["send_email", "wait", "add_tag", "remove_tag", "condition"],
-                description: "Step action",
-              },
-              delay_hours: { type: "number", description: "Hours to wait before this step" },
-              template_id: { type: "string", description: "Template for send_email steps" },
-              subject: { type: "string", description: "Subject for send_email steps" },
-              tag: { type: "string", description: "Tag for add_tag / remove_tag steps" },
-            },
-          },
-        },
-        active: { type: "boolean", description: "Start active immediately (default false)" },
       },
     },
     handler: (ctx, args) =>
-      apiFetch(ctx, "/automations", { method: "POST", body: JSON.stringify(args) }),
+      apiFetch(ctx, "/automations", {
+        method: "POST",
+        body: JSON.stringify({
+          name: args.name,
+          trigger_type: args.trigger,
+          trigger_config: args.trigger_config,
+        }),
+      }),
   }),
 
   defineTool({
     name: "toggle_automation",
     category: "automations",
     description:
-      "Activate or pause one automation workflow. " +
-      "\n\n" +
-      "This is consequential in one direction: ACTIVATING starts enrolling contacts, which " +
-      "means real emails begin going out on the workflow's schedule without further " +
-      "confirmation. Pausing stops new enrolments. Read the workflow with get_automation " +
-      "first so you know what activating will actually send. " +
-      "\n\n" +
-      "Contacts already part-way through a paused workflow are held rather than dropped, so " +
-      "pausing is not a cancellation. Safe to repeat. Requires an API key. ",
+      "Activate or pause an automation. Activating starts enrolling contacts and sending on the configured schedule.",
     scopes: ["write"],
     annotations: {
       title: "Toggle automation",
