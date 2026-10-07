@@ -39,6 +39,8 @@ npx -y @misarmail/mcp@latest
 | Claude.ai (web) | Custom connector | `connectors/claude-web.json` | Remote URL: `https://api.misar.io/mail/mcp` |
 | Smithery | `npx -y @smithery/cli install misar/misarmail-mcp --client claude` | `smithery.yaml` | Hosted, no local install |
 | ChatGPT (Custom GPT) | Actions → import schema | `customgpt/openapi.json` + `customgpt/gpt-config.json` | Bearer auth with your API key |
+| ChatGPT (native MCP) | Settings → Connected apps → Add connector | `connectors/chatgpt-mcp.json` | Streamable HTTP + bearer auth |
+| ChatGPT Apps SDK | platform.openai.com developer portal | `apps-sdk/manifest.json` | Submit manifest + OpenAPI spec |
 | Any MCP client over HTTP | Streamable HTTP | `connectors/remote-http.json` | `https://api.misar.io/mail/mcp` |
 | MCP registry | `server.json` | `server.json`, `.well-known/` | `io.github.Misar-AI/misarmail-mcp` |
 
