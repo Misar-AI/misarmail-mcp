@@ -262,7 +262,7 @@
     "/mcp/tools/create_campaign": {
       "post": {
         "operationId": "create_campaign",
-        "summary": "Create a new email marketing campaign as a draft. Creating never sends — call send_campaign separately once the content and audience are confirmed.",
+        "summary": "Create a new email marketing campaign as a draft. Creating never sends or schedules anything — once the content and audience are confirmed, call send_campaign to send it now or schedule it for later.",
         "requestBody": {
           "required": false,
           "content": {
