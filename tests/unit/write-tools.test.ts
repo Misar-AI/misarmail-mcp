@@ -67,12 +67,19 @@ describe("create_campaign body mapping", () => {
       bodyText: "hi",
       templateId: "tpl_1",
       segmentId: "seg_1",
-      scheduledAt: "2030-01-01T00:00:00.000Z",
     });
+    // create_campaign only drafts. Scheduling belongs to send_campaign, so a
+    // stray scheduled_at must never reach the API from here.
+    expect(body).not.toHaveProperty("scheduledAt");
     // No backing field on createCampaignSchema — must not be advertised or sent.
     expect(body).not.toHaveProperty("tags");
     expect(body).not.toHaveProperty("html");
     expect(body).not.toHaveProperty("from_email");
+  });
+
+  it("does not advertise scheduled_at, so creating can never schedule a send", async () => {
+    const { resolveTool } = await import("../../src/registry.js");
+    expect(resolveTool("create_campaign")!.inputSchema.properties).not.toHaveProperty("scheduled_at");
   });
 
   it("requires from_name in the tool schema", async () => {

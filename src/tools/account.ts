@@ -110,7 +110,7 @@ export const accountTools: ToolDefinition[] = [
       readOnlyHint: false,
       destructiveHint: false,
       idempotentHint: true,
-      openWorldHint: false,
+      openWorldHint: true,
     },
     inputSchema: {
       type: "object",

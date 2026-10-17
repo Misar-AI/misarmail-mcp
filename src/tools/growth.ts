@@ -103,7 +103,7 @@ export const growthTools: ToolDefinition[] = [
       readOnlyHint: false,
       destructiveHint: false,
       idempotentHint: false,
-      openWorldHint: false,
+      openWorldHint: true,
     },
     inputSchema: {
       type: "object",

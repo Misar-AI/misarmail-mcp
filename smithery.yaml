@@ -69,7 +69,7 @@ tools:
   - name: get_campaign
     description: "Get full details for one campaign: content, audience segment, schedule, and delivery statistics (sent, opened, clicked, bounced, complained)."
   - name: create_campaign
-    description: "Create a new email marketing campaign as a draft. Creating never sends — call send_campaign separately once the content and audience are confirmed."
+    description: "Create a new email marketing campaign as a draft. Creating never sends or schedules anything — once the content and audience are confirmed, call send_campaign to send it now or schedule it for later."
   - name: send_campaign
     description: "Send a campaign now, or schedule it for a future time by passing scheduled_at. This delivers real email to real recipients and cannot be undone once sending starts — confirm the audience with get_campaign first."
   - name: list_contacts
@@ -161,7 +161,7 @@ tools:
   - name: clear_sandbox
     description: "Delete every captured sandbox email. Affects only intercepted test messages, never real sent mail."
   - name: upgrade
-    description: "Show the current MisarMail plan, how much of each quota is left, and what upgrading unlocks. Call it any time — not only after hitting a limit. Set open=true to open the checkout page in the default browser."
+    description: "Show the current MisarMail plan, how much of each quota is left, and what upgrading unlocks, with the link to upgrade. Call it any time — not only after hitting a limit. Reads only: it never changes the plan or takes payment; the user upgrades by following the link. On a local install, open=true also opens that link in the user's browser."
 
 prompts:
   - name: compose_email

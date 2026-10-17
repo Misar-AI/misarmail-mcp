@@ -11,6 +11,7 @@ import { httpContext } from "./lib/context.js";
 import { formatError } from "./lib/errors.js";
 import { SERVER_PROTOCOL_VERSION } from "./protocol.js";
 import { authGuidance } from "./lib/auth-guidance.js";
+import { SERVER_NAME, SERVER_VERSION } from "./version.js";
 
 /**
  * Transport-agnostic Streamable HTTP (JSON-RPC 2.0) handler for MisarMail MCP.
@@ -90,8 +91,8 @@ export function createHttpHandler(options: HttpHandlerOptions) {
     authenticate,
     checkPlan,
     baseUrl,
-    serverName = "misarmail",
-    serverVersion = "3.0.0",
+    serverName = SERVER_NAME,
+    serverVersion = SERVER_VERSION,
     onError,
   } = options;
 

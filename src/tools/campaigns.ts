@@ -60,7 +60,7 @@ export const campaignTools: ToolDefinition[] = [
     name: "create_campaign",
     category: "campaigns",
     description:
-      "Create a new email marketing campaign as a draft. Creating never sends — call send_campaign separately once the content and audience are confirmed.",
+      "Create a new email marketing campaign as a draft. Creating never sends or schedules anything — once the content and audience are confirmed, call send_campaign to send it now or schedule it for later.",
     scopes: ["write"],
     annotations: {
       title: "Create campaign",
@@ -82,10 +82,6 @@ export const campaignTools: ToolDefinition[] = [
         text: { type: "string", description: "Plain text body content" },
         template_id: { type: "string", description: "Use a saved template instead of inline HTML" },
         segment_id: { type: "string", description: "Audience segment to send to" },
-        scheduled_at: {
-          type: "string",
-          description: "ISO 8601 timestamp to schedule the send (omit to keep as draft)",
-        },
       },
     },
     handler: (ctx, args) =>
@@ -101,7 +97,6 @@ export const campaignTools: ToolDefinition[] = [
           bodyText: args.text,
           templateId: args.template_id,
           segmentId: args.segment_id,
-          scheduledAt: args.scheduled_at,
         }),
       }),
   }),

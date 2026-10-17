@@ -1,6 +1,6 @@
 {
   "name": "@misarmail/mcp",
-  "version": "5.1.2",
+  "version": "5.1.6",
   "mcpName": "io.github.Misar-AI/misarmail-mcp",
   "description": "MisarMail MCP server — send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability from Claude, Cursor, VS Code, Windsurf, and any MCP client.",
   "type": "module",
@@ -78,7 +78,7 @@
   "bugs": {
     "url": "https://github.com/Misar-AI/misarmail-mcp/issues"
   },
-  "author": "Misar AI <support@misar.io>",
+  "author": "Misar.AI <support@misar.io>",
   "license": "MIT",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",

@@ -1,9 +1,9 @@
 {
   "name": "misarmail",
-  "version": "5.1.2",
+  "version": "5.1.6",
   "description": "Send email, run campaigns, manage contacts and automations, A/B test, and audit deliverability — from any AI assistant.",
   "author": {
-    "name": "Misar AI",
+    "name": "Misar.AI",
     "email": "support@misar.io",
     "url": "https://misar.io"
   },

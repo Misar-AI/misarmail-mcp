@@ -76,7 +76,7 @@ export const automationTools: ToolDefinition[] = [
       readOnlyHint: false,
       destructiveHint: false,
       idempotentHint: false,
-      openWorldHint: false,
+      openWorldHint: true,
     },
     inputSchema: {
       type: "object",
@@ -116,7 +116,7 @@ export const automationTools: ToolDefinition[] = [
       readOnlyHint: false,
       destructiveHint: false,
       idempotentHint: true,
-      openWorldHint: false,
+      openWorldHint: true,
     },
     inputSchema: {
       type: "object",

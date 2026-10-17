@@ -47,7 +47,7 @@ export const abTestTools: ToolDefinition[] = [
       readOnlyHint: false,
       destructiveHint: false,
       idempotentHint: false,
-      openWorldHint: false,
+      openWorldHint: true,
     },
     inputSchema: {
       type: "object",

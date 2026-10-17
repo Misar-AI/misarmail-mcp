@@ -89,7 +89,7 @@ export const contactTools: ToolDefinition[] = [
     annotations: {
       title: "Update contact",
       readOnlyHint: false,
-      destructiveHint: false,
+      destructiveHint: true,
       idempotentHint: true,
       openWorldHint: false,
     },
@@ -130,7 +130,7 @@ export const contactTools: ToolDefinition[] = [
     annotations: {
       title: "Import contacts",
       readOnlyHint: false,
-      destructiveHint: false,
+      destructiveHint: true,
       idempotentHint: false,
       openWorldHint: false,
     },

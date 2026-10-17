@@ -132,7 +132,7 @@ Self-hosted instances: set `MISARMAIL_BASE_URL`.
 | `toggle_integration` | Enable or disable an integration. |
 | `list_sandbox_sends` | List emails captured by sandbox mode. |
 | `clear_sandbox` | Delete every captured sandbox email. |
-| `upgrade` | Show the current MisarMail plan, how much of each quota is left, and what upgrading unlocks. |
+| `upgrade` | Show the current MisarMail plan, how much of each quota is left, and what upgrading unlocks, with the link to upgrade. |
 
 ## Prompts
 
@@ -199,4 +199,4 @@ Every action does.
 - npm — https://www.npmjs.com/package/@misarmail/mcp
 - Source — https://github.com/Misar-AI/misarmail-mcp
 
-MIT © [Misar AI](https://misar.io)
+MIT © [Misar.AI](https://misar.io)

@@ -78,7 +78,7 @@ export const upgradeTools: ToolDefinition[] = [
     name: "upgrade",
     category: "account",
     description:
-      "Show the current MisarMail plan, how much of each quota is left, and what upgrading unlocks. Call it any time — not only after hitting a limit. Set open=true to open the checkout page in the default browser.",
+      "Show the current MisarMail plan, how much of each quota is left, and what upgrading unlocks, with the link to upgrade. Call it any time — not only after hitting a limit. Reads only: it never changes the plan or takes payment; the user upgrades by following the link. On a local install, open=true also opens that link in the user's browser.",
     annotations: {
       title: "Plan usage and upgrade",
       readOnlyHint: true,
@@ -91,7 +91,7 @@ export const upgradeTools: ToolDefinition[] = [
       properties: {
         open: {
           type: "boolean",
-          description: "Open the upgrade/checkout page in the default browser.",
+          description: "Local installs only: also open the upgrade link in the user's browser. Ignored by the hosted server, which returns the link instead.",
         },
         plan: {
           type: "string",
@@ -121,8 +121,15 @@ export const upgradeTools: ToolDefinition[] = [
           : data.upgrade?.plans.find((p) => p.recommended);
         const url = chosen?.url ?? data.upgrade?.urls.compare;
         if (url) {
-          openBrowser(url);
-          sections.push(`  Opened ${url} in your browser.\n`);
+          // Only a local (stdio) install runs on the user's machine. The hosted
+          // HTTP server must never launch a process on its own host for a remote
+          // caller, so there it just hands back the link.
+          if (ctx.source === "mcp_stdio") {
+            openBrowser(url);
+            sections.push(`  Opened ${url} in your browser.\n`);
+          } else {
+            sections.push(`  Upgrade here: ${url}\n`);
+          }
         }
       }
 

@@ -37,8 +37,8 @@ function toWireTool(t: (typeof ALL_TOOLS)[number]) {
   };
 }
 
-export const SERVER_NAME = "misarmail";
-export const SERVER_VERSION = "3.0.0";
+import { SERVER_NAME, SERVER_VERSION } from "./version.js";
+export { SERVER_NAME, SERVER_VERSION };
 
 function buildServer(): Server {
   const server = new Server(
